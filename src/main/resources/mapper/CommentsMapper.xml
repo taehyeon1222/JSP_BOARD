@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nth.mapper.CommentsMapper">
+
+
+    <!-- 댓글 작성 -->
+    <insert id="insertComment" parameterType="com.nth.domain.Comments">
+        INSERT INTO COMMENTS (ID,CONTENT, POST_ID, USER_ID,CREATED_DATE)
+        VALUES (COMMENTS_SEQ.NEXTVAL,#{content},#{postId},#{userInfo.id},SYSDATE)
+    </insert>
+
+    <!--댓글확인-->
+    <select id="getCommentsByPostId" resultType="com.nth.domain.Comments" parameterType="java.lang.Long">
+        SELECT C.id, C.content, C.post_id AS postId, C.user_id AS userId, C.created_date AS createdDate,
+               U.ID AS "userInfo.id", U.USERNAME AS "userInfo.username"
+        FROM COMMENTS C
+                 JOIN USERINFO U ON C.user_id = U.id
+        WHERE C.post_id = #{postId}
+        ORDER BY C.CREATED_DATE ASC
+    </select>
+
+
+    <!-- 댓글 확인
+<select id="getCommentsByPostId" resultType="com.nth.domain.Comments" parameterType="java.lang.Long">
+    SELECT * FROM COMMENTS WHERE post_id = #{postId}
+</select>
+-->
+
+<!--댓글삭제-->
+    <delete id="deleteComment" parameterType="long">
+        DELETE FROM COMMENTS WHERE ID = #{id}
+    </delete>
+
+
+    <update id="updateComment" parameterType="com.nth.domain.Comments">
+        UPDATE COMMENTS SET content = #{content} WHERE ID = #{id}
+    </update>
+
+<!--
+    <select id="getCommentById" resultType="com.nth.domain.Comments" parameterType="java.lang.Long">
+        SELECT ID,CONTENT,POST_ID AS postId, USER_ID AS userId, CREATED_DATE AS createdDate
+        FROM COMMENTS
+        WHERE id = #{id}
+    </select>
+-->
+
+    <select id="getCommentById" resultType="com.nth.domain.Comments" parameterType="java.lang.Long">
+        SELECT
+        c.ID,
+        c.CONTENT,
+        c.POST_ID AS postId,
+        c.USER_ID AS userId,
+        c.CREATED_DATE AS createdDate,
+        u.ID AS "userInfo.id",
+        u.USERNAME AS "userInfo.username"
+        FROM COMMENTS c
+        LEFT JOIN USERINFO u ON c.USER_ID = u.ID
+        WHERE c.id = #{id}
+    </select>
+
+
+
+</mapper>
+

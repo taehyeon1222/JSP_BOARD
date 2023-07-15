@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nth.mapper.PostMapper">
+    <select id="getAllPosts" resultType="com.nth.domain.Post">
+        SELECT * FROM POST
+    </select>
+<!--
+    <select id="getPostById" parameterType="long" resultType="com.nth.domain.Post">
+        SELECT * FROM POST WHERE ID = #{id}
+    </select>
+-->
+    <!--게시글 조인 조회-->
+    <select id="getPostById" parameterType="long" resultType="com.nth.domain.Post">
+        SELECT P.ID, P.TITLE, P.CONTENT, P.CREATED_DATE AS createdDate, P.USER_ID AS userId,
+               U.ID AS "userInfo.id", U.USERNAME AS "userInfo.username",
+               U.PASSWORD AS "userInfo.password", U.CREATED_AT AS "userInfo.createdDate"
+        FROM "POST" P
+                 JOIN "USERINFO" U ON P.USER_ID = U.ID
+        WHERE P.ID = #{id}
+    </select>
+
+<!--유저 추가-->
+    <insert id="insertUserPost" parameterType="com.nth.domain.Post">
+        INSERT INTO POST (ID, TITLE, CONTENT, CREATED_DATE, USER_ID)
+        VALUES (SEQ_POST_ID.NEXTVAL, #{title}, #{content}, SYSDATE, #{userInfo.id})
+    </insert>
+
+    <insert id="insertPost" parameterType="com.nth.domain.Post">
+        INSERT INTO POST (ID, TITLE, CONTENT, CREATED_DATE)
+        VALUES (SEQ_POST_ID.NEXTVAL, #{title}, #{content}, SYSDATE)
+    </insert>
+
+
+    <update id="updatePost" parameterType="com.nth.domain.Post">
+        UPDATE POST SET TITLE = #{title}, CONTENT = #{content} WHERE ID = #{id}
+    </update>
+
+
+    <delete id="deletePost" parameterType="long">
+        DELETE FROM POST WHERE ID = #{id}
+    </delete>
+
+
+
+    <!--페이징-->
+    <select id="getPostList" resultType="com.nth.domain.Post" parameterType="com.nth.service.Pagination">
+        SELECT P.id, P.title, P.content, P.created_date as createdDate, U.ID AS "userInfo.id", U.USERNAME AS "userInfo.username",
+               U.PASSWORD AS "userInfo.password", U.CREATED_AT AS "userInfo.createdDate"
+        FROM (
+                 SELECT ROW_NUMBER() OVER (ORDER BY id DESC) row_num, Post.*
+                 FROM Post
+             ) P
+                 JOIN "USERINFO" U ON P.USER_ID = U.ID
+        WHERE row_num BETWEEN #{startList}+1 AND #{startList}+#{listSize}
+    </select>
+
+
+    <!--페이징 카운트 쿼리-->
+    <select id="getPostCount" resultType="int">
+        SELECT COUNT(*) FROM Post
+    </select>
+
+
+
+</mapper>
