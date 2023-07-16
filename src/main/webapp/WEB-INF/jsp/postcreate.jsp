@@ -22,7 +22,7 @@
     <input type="text" id="title" name="title" value="${postForm.title}"><br><br>
     <label for="content">Content:</label><br>
     <textarea id="content" name="content" rows="4" cols="50">${postForm.content}</textarea><br><br>
-    <input type="submit" value="Create">
+    <input type="submit" value="작성하기">
 </form>
 </body>
 </html>

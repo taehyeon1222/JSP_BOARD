@@ -20,6 +20,7 @@
     <th>제목</th>
     <th>작성자</th>
     <th>작성일</th>
+    <th>추천수</th>
 
   </tr>
   <c:forEach var="post" items="${postList}" varStatus="status">
@@ -28,6 +29,7 @@
       <td><a href="/post/${post.id}">${post.title}</a></td>
       <th>${post.userInfo.username}</th>
       <td>${post.createdDate}</td>
+      <td>${post.likeCount}</td>
     </tr>
   </c:forEach>
 </table>

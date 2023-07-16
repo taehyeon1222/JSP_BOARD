@@ -9,7 +9,7 @@
 <form action="/login" method="post">
     <input type="text" name="username"><br>
     <input type="text" name="password">
-    <button type="submit">가입하기</button>
+    <button type="submit">로그인</button>
 </form>
 
 </html>

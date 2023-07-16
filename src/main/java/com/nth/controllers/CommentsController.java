@@ -37,7 +37,6 @@ public class CommentsController {
 
     @GetMapping("/comments")
     public String handleAction(@PathVariable long id, @PathVariable long postId, Model model) {
-        //model.addAttribute("action", "/comments");
         log.info("/comments 겟맵핑이 발생함");
         return "redirect:/post/" + postId;
     }
@@ -53,23 +52,13 @@ public class CommentsController {
             redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
             return "redirect:/post/" + postId;
         }
-        if (result.hasErrors()) {
-            // 폼 검증 실패 시 에러 메시지 추가
-            redirectAttributes.addFlashAttribute("commentForm", commentForm);
-            redirectAttributes.addFlashAttribute("errors", result.getAllErrors());
-
-            List<ObjectError> errors = result.getAllErrors();
-            for (ObjectError error : errors) {     //사용자에게 다시 글을 보여줌
-                log.info("댓글 작성실패\n유효성 검사 오류로 인해 등록하지 못했습니다.\n" +
-                        "실패이유: {}" + error.getDefaultMessage());
-                model.addAttribute("updateComment", commentForm);
-                return "redirect:/post/" + postId; // 에러 발생 시 돌아갈 페이지
-            }
-        }
-        //System.out.println("createComment()메소드 실행됨");
-
-        comment.setPostId(postId);
+        String errorResult = validateCheck(result, commentForm, redirectAttributes, postId);
+        if (errorResult != null) {
+            return errorResult;
+        } // 유효성 검사
+        comment.setPostId(postId); // 현재 postid를 넣어줌
         comment.setContent(commentForm.getContent());
+
         //model.addAttribute("action","/comments"); //에 추가
         UserInfo userInfo = userInfoService.findByUsername(principal.getName());
         commentsService.createComment(comment, userInfo);
@@ -97,13 +86,10 @@ public class CommentsController {
         log.info("/post/Comment/delete/{} 삭제요청이 들어왔습니다" +
                 "\n게시물id:{}" +
                 "\n댓글id:{} 게시글작성자{}", id, postId, id,comment.getUserInfo().getUsername());//댓글삭제로그
-        if (principal == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "댓글 삭제 권한이 없습니다.1");
-            return "redirect:/post/" + postId;
-        }else if (!comment.getUserInfo().getUsername().equals(principal.getName())){
-            redirectAttributes.addFlashAttribute("errorMessage", "댓글 삭제 권한이 없습니다.2");
-            return "redirect:/post/" + postId;
-        }
+
+        String authorityCheckResult = checkUserName(principal,comment, postId, redirectAttributes,"삭제");
+        if (authorityCheckResult != null) return authorityCheckResult; // 유저권한 체크 이름과 작성자가 같은지 체크
+
 
         // 댓글을 삭제합니다.
         commentsService.deleteComment(id);
@@ -120,21 +106,17 @@ public class CommentsController {
 
         Comments updateComment = commentsService.getCommentById(id);
         log.info("/post/modify/{id} GET 수정요청이 들어왔습니다." +
-                "\n게시물 id 값 {}" +
-                "\n댓글id값:{}", postId, id);
+                "\n게시물 id 값:{}" +
+                "\n댓글id값:{}",postId,id);
         if (updateComment == null) {
             log.error("댓글이 삭제 되어 댓글을 수정 할 수 없습니다. {}" +
                     "접근 postid:{}" + id, postId);
             redirectAttributes.addFlashAttribute("errorMessage", "댓글이 이미 삭제되었습니다.");
             return "redirect:/post/" + postId;
         }
-        if (principal == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "댓글 수정 권한이 없습니다.1");
-            return "redirect:/post/" + postId;
-        }else if (!updateComment.getUserInfo().getUsername().equals(principal.getName())){
-            redirectAttributes.addFlashAttribute("errorMessage", "댓글 수정 권한이 없습니다.2");
-            return "redirect:/post/" + postId;
-        }
+
+        String authorityCheckResult = checkUserName(principal,updateComment, postId, redirectAttributes,"수정");
+        if (authorityCheckResult != null) return authorityCheckResult; // 작성된 게시글과 유저의권한을 확인합니다
 
         //model.addAttribute("formActionUrl", "/comments"); //게시글의 댓글을 위해 추가함
         model.addAttribute("formActionUrl", "/post/" + postId + "/c/modify/" + id);
@@ -145,6 +127,7 @@ public class CommentsController {
         model.addAttribute("comments", comments);
         model.addAttribute("updateComment", updateComment);
         return "post_detail";
+
     }
 
 
@@ -159,25 +142,69 @@ public class CommentsController {
             redirectAttributes.addFlashAttribute("errorMessage", "댓글이 이미 삭제되었습니다.");
             return "redirect:/post/" + postId;
         }
-        if (result.hasErrors()) {
-            // 폼 검증 실패 시 에러 메시지 추가
-            redirectAttributes.addFlashAttribute("commentForm", commentForm);
-            redirectAttributes.addFlashAttribute("errors", result.getAllErrors());
 
-            List<ObjectError> errors = result.getAllErrors();
-            for (ObjectError error : errors) {     //사용자에게 다시 글을 보여줌
-                log.info("댓글 작성실패\n유효성 검사 오류로 인해 등록하지 못했습니다.\n" +
-                        "실패이유: {}" + error.getDefaultMessage());
-                redirectAttributes.addFlashAttribute("updateComment", commentForm);
-                return "redirect:/post/" + postId; // 에러 발생 시 돌아갈 페이지
-            }
+        String errorResult = validateCheck(result, commentForm, redirectAttributes, postId);
+        if (errorResult != null) {
+            return errorResult;
         }
-        ㅁ
+
         Comment.setContent(comment.getContent());
         commentsService.updateComments(comment.getId(), comment);
         return "redirect:/post/" + comment.getPostId();
     }
 
+    /**
+     *
+     * @param principal 유저권한
+     * @param comment 댓글
+     * @param postId 게시글 아이디
+     * @param redirectAttributes 에러메세지반환
+     * @param errorMessage 댓글 { } 권한이 없습니다.
+     * @return null
+     *
+     * 작성된 게시글과 유저의권한을 확인합니다.
+     * principal 이 널인지 확인하여 로그인 상태를 확인합니다.
+     *
+     */
+    private String checkUserName(Principal principal, Comments comment, long postId, RedirectAttributes redirectAttributes,
+                                 String errorMessage) {
+        if (principal == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "댓글 "+errorMessage+"권한이 없습니다.1");
+            return "redirect:/post/" + postId;
+        }else if (!comment.getUserInfo().getUsername().equals(principal.getName())){
+            redirectAttributes.addFlashAttribute("errorMessage", "댓글 "+errorMessage+"권한이 없습니다.2");
+            return "redirect:/post/" + postId;
+        }
+        return null;
+    }
+
+
+    /**
+     *
+     * @param bindingResult
+     * @param commentForm
+     * @param redirectAttributes 리다이렉트 객체 전달을 위함
+     * @param postId
+     * @return null;
+     *
+     * 원래 본인의 게시글로 리다이렉트 합니다.
+     * 유효성 검사
+     */
+    private String validateCheck(BindingResult bindingResult, CommentForm commentForm, RedirectAttributes redirectAttributes, long postId) {
+        if (bindingResult.hasErrors()) {
+            // 폼 검증 실패 시 에러 메시지 추가
+            redirectAttributes.addFlashAttribute("commentForm", commentForm);
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            for (ObjectError error : errors) {
+                log.info("댓글 작성실패\n유효성 검사 오류로 인해 등록하지 못했습니다.\n실패이유: {}", error.getDefaultMessage());
+                redirectAttributes.addFlashAttribute("updateComment", commentForm);
+                return "redirect:/post/" + postId; // 에러 발생 시 돌아갈 페이지
+            }
+        }
+        return null;
+    }
 
 
 }

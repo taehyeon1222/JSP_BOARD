@@ -12,6 +12,7 @@
     <select id="getUserInfoById" parameterType="java.lang.Long" resultType="com.nth.domain.UserInfo">
         SELECT * FROM USERINFO WHERE id = #{id}
     </select>
+
     <!--가입-->
     <insert id="insertUserInfo" parameterType="com.nth.domain.UserInfo">
         INSERT INTO USERINFO (id, username, password, created_at)

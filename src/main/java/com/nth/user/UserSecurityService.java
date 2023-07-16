@@ -30,7 +30,6 @@ public class UserSecurityService implements UserDetailsService {
             if (_siteUser.isEmpty()) {
                 throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
             }
-
             // 조회된 사용자 정보를 가져옵니다.
             UserInfo siteUser = _siteUser.get();
 

@@ -21,16 +21,28 @@
         WHERE P.ID = #{id}
     </select>
 
-<!--유저 추가-->
+<!--유저 추가
     <insert id="insertUserPost" parameterType="com.nth.domain.Post">
         INSERT INTO POST (ID, TITLE, CONTENT, CREATED_DATE, USER_ID)
         VALUES (SEQ_POST_ID.NEXTVAL, #{title}, #{content}, SYSDATE, #{userInfo.id})
     </insert>
-
+-->
+    <!--
     <insert id="insertPost" parameterType="com.nth.domain.Post">
         INSERT INTO POST (ID, TITLE, CONTENT, CREATED_DATE)
         VALUES (SEQ_POST_ID.NEXTVAL, #{title}, #{content}, SYSDATE)
+-->
+
+    <insert id="insertUserPost" parameterType="com.nth.domain.Post" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        <selectKey resultType="Long" keyProperty="id" order="BEFORE">
+            SELECT SEQ_POST_ID.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO POST (ID, TITLE, CONTENT, CREATED_DATE, USER_ID)
+        VALUES (#{id}, #{title}, #{content}, SYSDATE, #{userInfo.id})
     </insert>
+
+
+
 
 
     <update id="updatePost" parameterType="com.nth.domain.Post">

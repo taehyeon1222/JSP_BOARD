@@ -17,9 +17,6 @@
 <a class="boxed-btn3" href="/post">글목록</a>
 <a class="boxed-btn3" href="/create">글작성</a>
 
-<sec:authorize access="hasRole('ROLE_USER')">
-    유저권한임
-</sec:authorize>
 
 <sec:authorize access="isAuthenticated()">
     <c:out value="${pageContext.request.userPrincipal.name}님, 반갑습니다."/>

@@ -1,14 +1,13 @@
 package com.nth.controllers;
 
 import com.nth.domain.Comments;
+import com.nth.domain.Like;
 import com.nth.domain.Post;
 import com.nth.domain.UserInfo;
+import com.nth.dto.CommentForm;
 import com.nth.dto.PostForm;
 import com.nth.mapper.PostMapper;
-import com.nth.service.CommentsService;
-import com.nth.service.Pagination;
-import com.nth.service.PostService;
-import com.nth.service.UserInfoService;
+import com.nth.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -39,7 +38,7 @@ public class homeController {
     private final CommentsService commentsService;
 
     private final UserInfoService userInfoService;
-
+    private final LikeService likeService;
     private static final Logger log = LoggerFactory.getLogger(homeController.class);
 
     @GetMapping("/")
@@ -62,6 +61,7 @@ public class homeController {
         Pagination pagination = new Pagination();
         pagination.pageInfo(page, range, listCnt);
         //pagination.pageconfig(5 ,5); 페이지 설정
+
         List<Post> postList = postService.getPostList(pagination);
         model.addAttribute("postList", postList);
         model.addAttribute("pagination", pagination);
@@ -74,7 +74,9 @@ public class homeController {
         //Post post = postMapper.getPostById(id);
         model.addAttribute("formActionUrl", "/comments"); //게시글의 댓글을 위해 추가함
         Post post = postService.getPostById(id);
+
         List<Comments> comments = commentsService.getCommentsByPostId(id); // 댓글출력
+
 //        log.info("@GetMapping(\"/post/{id}\") 가 실행되었습니다.\n\n"+
 //                 "post.getTitle():{}"+post.getTitle()+
 //                "\npost.getContent(){}:"+post.getContent()+
@@ -83,6 +85,8 @@ public class homeController {
 //
 //                "\npost.getUserInfo():{}"+post.getUserInfo().getUsername()
       //  ); // 불러온글 로그
+        Long Likecount = likeService.countLike(post.getId());
+        model.addAttribute("like", Likecount); // 게시글추천데이터
         model.addAttribute("post", post); // 게시글데이터
         model.addAttribute("comments", comments); //댓글 데이터
         return "post_detail";
@@ -91,26 +95,16 @@ public class homeController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public String createPost(@Valid PostForm postForm,BindingResult result,Principal principal
-    ,Model model) {
+    ,Model model, RedirectAttributes redirectAttributes) {
 
-        if (result.hasErrors()) {
-            // 폼 검증 실패 시 에러 메시지 추가
-            model.addAttribute("postForm", postForm); // 에러메세지
-            model.addAttribute("errors", result.getAllErrors()); //에러메세지
-
-            List<ObjectError> errors = result.getAllErrors();
-            for (ObjectError error : errors) {     //사용자에게 다시 글을 보여줌
-                log.info("게시글작성실패\n유효성 검사 오류로 인해 등록하지 못했습니다.\n" +
-                        "실패이유: {}" + error.getDefaultMessage());
-                model.addAttribute("postForm", postForm);
-                return "postcreate"; // 에러 발생 시 돌아갈 페이지
-            }
-        }
-           // String username = principal.getName();
-            UserInfo userInfo = userInfoService.findByUsername(principal.getName());
-
-            postService.createIdPost(postForm, userInfo);
-            return "postcreate";
+        String errorResult = validateCheck(result,postForm,redirectAttributes);
+        if (errorResult != null) {
+            return errorResult;
+        } // 유효성 검사
+           UserInfo userInfo = userInfoService.findByUsername(principal.getName());
+           Post post = postService.createIdPost(postForm, userInfo);
+           Long postid = post.getId();
+           return "redirect:/post/"+postid;
         }
 
         @PreAuthorize("isAuthenticated()")
@@ -118,20 +112,15 @@ public class homeController {
         public String showPostForm(Model model) {
             model.addAttribute("formActionUrl", "/create");
         return "postcreate";}
-
-
         //삭제
          @GetMapping("/post/delete/{id}")
         public String deletePost(@PathVariable long id, Principal principal, RedirectAttributes redirectAttributes){
         log.info("/post/delete/{}요청이 들어왔습니다.",id);
         Post post = postService.getPostById(id);
-        //System.out.println(!post.getUserInfo().getUsername().equals(principal.getName()));
-
-             String redirectPage = CheckingPermissions(post, principal, redirectAttributes);
-             if (redirectPage != null) {
-                 return redirectPage;
+        String redirectPage = checkAuthorAccess(post, principal, redirectAttributes,"삭제");
+            if (redirectPage != null) {
+            return redirectPage;
              }
-
              postService.deletePost(id);
         return "redirect:/post";
         }
@@ -143,8 +132,9 @@ public class homeController {
         log.info("/post/modify/{} 요청이 들어왔습니다. (GET)", id);
         Post post = postService.getPostById(id);
 
-        String redirectPage = CheckingPermissions(post, principal, redirectAttributes);
+        String redirectPage = checkAuthorAccess(post,principal,redirectAttributes,"수정 ");
         if (redirectPage != null) {
+            log.info("redirectPage가 실행됨");
             return redirectPage;
         }
 
@@ -155,6 +145,7 @@ public class homeController {
         model.addAttribute("postForm", postForm);
         return "postcreate";
     }
+
     @PostMapping("/post/modify/{id}")
     public String modifyPost(@PathVariable long id, @Valid PostForm postForm, BindingResult result) {
         log.info("/post/modifySubmit/{} 요청이 들어왔습니다. (POST)", id);
@@ -170,20 +161,41 @@ public class homeController {
 
 
 
-    public String CheckingPermissions(Post post, Principal principal, RedirectAttributes redirectAttributes) {
+    public String checkAuthorAccess(Post post,Principal principal, RedirectAttributes redirectAttributes,
+                                                 String errorMessage) {
         if (principal == null) {
-            log.info("인증되지 않은 사용자에 의한 삭제 시도." +
+            log.info("checkPostPermissionAndRedirect()실행됨\n" +
+                    "인증되지 않은 사용자에 의한 시도." +
                     "\n요청된 게시글 작성자: {}" +
                     "\n현재 로그인상태 : {}", post.getUserInfo().getUsername(), !(principal == null));
-            redirectAttributes.addFlashAttribute("errorMessage", "게시글 삭제 권한이 없습니다.1");
+            redirectAttributes.addFlashAttribute("errorMessage", "게시글"+errorMessage +"권한이 없습니다.1");
             return "redirect:/post/" + post.getId();
-        } else if (!post.getUserInfo().getUsername().equals(principal.getName()))
-            log.info("삭제 권한이 없습니다." +
+        } else if (!post.getUserInfo().getUsername().equals(principal.getName())) {
+            log.info("checkPostPermissionAndRedirect()메소드 실행됨\n" +
                     "\n요청된 게시글 작성자:{}" +
                     "\n현재 로그인한 사용자:{}", post.getUserInfo().getUsername(), principal.getName());
-            redirectAttributes.addFlashAttribute("errorMessage", "게시글 삭제 권한이 없습니다.2");
+            redirectAttributes.addFlashAttribute("errorMessage", "게시글"+errorMessage +"권한이 없습니다.1");
             return "redirect:/post/" + post.getId();
         }
+        return null;
+        }
+
+
+    private String validateCheck(BindingResult bindingResult,PostForm postForm, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            // 폼 검증 실패 시 에러 메시지 추가
+            redirectAttributes.addFlashAttribute("commentForm",postForm);
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            for (ObjectError error : errors) {
+                log.info("댓글 작성실패\n유효성 검사 오류로 인해 등록하지 못했습니다.\n실패이유: {}", error.getDefaultMessage());
+                redirectAttributes.addFlashAttribute("postForm",postForm);
+                return "redirect:/create"; // 에러 발생 시 돌아갈 페이지
+            }
+        }
+        return null;
+    }
 
 
 

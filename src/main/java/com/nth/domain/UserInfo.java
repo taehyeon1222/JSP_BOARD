@@ -11,10 +11,11 @@ public class UserInfo {
     private String username;
     private String password;
     private String createdDate;
+    //private String role;
 }
 /*
     CREATE TABLE USERINFO(
-        id NUMBER(10) PRIMARY KEY,
+    id NUMBER(10) PRIMARY KEY,
     username VARCHAR2(50) NOT NULL,
     password VARCHAR2(100) NOT NULL,
     created_at DATE DEFAULT SYSDATE

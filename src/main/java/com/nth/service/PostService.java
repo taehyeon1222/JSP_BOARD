@@ -16,17 +16,14 @@ import java.security.Principal;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PostService {
 
     private static final Logger log = LoggerFactory.getLogger(PostService.class);
 
     private final PostMapper postMapper;
-    @Autowired
-    public PostService(PostMapper postMapper) {
-        this.postMapper = postMapper;
-    }
 
-
+    private final LikeService likeService;
 
 
 
@@ -45,75 +42,87 @@ public class PostService {
      */
     public Post getPostById(Long id) {
         Post post = postMapper.getPostById(id);
-        log.info("getPostById()가실행되었습니다.\n게시글을 불러오기위한 메소드\n불러온 게시물 id:{}",id);
+        log.info("getPostById()가실행되었습니다.id:{}",id);
         if (id == null) {
+            log.info("getPostById():ID 값이 없습니다.");
             throw new IllegalArgumentException("ID 값이 없습니다.");
         }
         if(post==null){
-            log.info("게시물을 불러올수가 없습니다.");
-            throw new MyBatisSystemException(new Throwable("Post with id " + id + " not found."));
+            log.info("getPostById():게시물을 불러올수가 없습니다.");
+            throw new MyBatisSystemException(new Throwable("게시물 id " + id));
         }
         return post;
+
 
     }
 
 
-    //게시글 작성
-    public void createIdPost(PostForm postForm, UserInfo userInfo) {
-        log.info("PostService\n" +
-                "\nCreateIdPost()실행됨" +
-                "\n입력된값" +
-                "\n제목:[{}]" +
-                "\n내용:[{}]"+
-                "\n유저아이디:[{}]"
-                ,postForm.getTitle(),postForm.getContent()
-                ,userInfo.getUsername() // 게시글 작성로그
-        );
-
+    /**
+     *
+     * @param postForm 게시글폼
+     * @param userInfo 유저정보
+     * @return post객체를 반환합니다.
+     */
+    public Post createIdPost(PostForm postForm, UserInfo userInfo) {
         Post post = new Post();
         post.setTitle(postForm.getTitle());
         post.setContent(postForm.getContent());
         post.setUserInfo(userInfo);
         postMapper.insertUserPost(post);
+        log.info("PostService\n" +
+                        "\nCreateIdPost()실행됨" +
+                        "\n입력된값" +
+                        "\npostid:{}" +
+                        "\n제목:[{}]" +
+                        "\n내용:[{}]"+
+                        "\n유저아이디:[{}]"
+                ,post.getId()
+                ,postForm.getTitle(),postForm.getContent()
+                ,userInfo.getUsername() // 게시글 작성로그
+        );
+        return post;
+
     }
 
 
+    //게시물 수정서비스
     public void updatePost(long id, Post post) {
-        Post originalPost = postMapper.getPostById(id);
-        if (originalPost == null) {
+        log.info("updatePost()가 실행되었습니다.\n 요청된 게시물 id: {}", id);
+        Post Post = postMapper.getPostById(id);
+        log.info("post == null에러 발생\n존재하지않는게시물");
+        if (Post == null) {
+            log.info("post == null에러 발생\n존재하지않는게시물");
             throw new RuntimeException("id가 널 입니다. id " + id);
         }
-
-
-        originalPost.setTitle(post.getTitle());
-        originalPost.setContent(post.getContent());
-        postMapper.updatePost(originalPost);
+        Post.setTitle(post.getTitle());
+        Post.setContent(post.getContent());
+        postMapper.updatePost(Post);
+        log.info("게시물이 수정 되었습니다.");
     }
 
 
+    //게시물삭제서비스
     public void deletePost(long id) {
         log.info("deletePost()가 실행되었습니다.\n 요청된 게시물 id: {}", id);
         // 게시물 존재 여부 확인
         Post post = postMapper.getPostById(id);
-
         if (post == null) {
             log.info("post == null에러 발생\n존재하지않는게시물");
-            throw new IllegalArgumentException("존재하지 않는 게시물입니다."); // 바꾸기
+            throw new  RuntimeException("존재하지 않는 게시물입니다.");
         }
-
-
         String deletedTitle = post.getTitle(); // 삭제된 게시물의 제목
-        log.info("삭제된 게시물 제목: {}", deletedTitle);
+        log.info("삭제된 게시물 제목:{} ID:{}", deletedTitle);
         postMapper.deletePost(id);
         log.info("게시물이 성공적으로 삭제되었습니다.");
     }
 
 
 
-
+    //게시물 카운트 페이징처리
     public int getPostCount() {
         return postMapper.getPostCount();
     }
+
 
 
 
@@ -124,21 +133,27 @@ public class PostService {
         int listCnt = postMapper.getPostCount();
         pagination.pageInfo(pagination.getPage(), pagination.getRange(), listCnt);
         List<Post> postList = postMapper.getPostList(pagination);
-        // 로깅을 통해 작성일 값 확인
+
         for (Post post : postList) {
-
-//            log.info("getPostList()메소드가 실행되었습니다.\n" +
-//                            "********************불러온게시물********************"+
-//                            "\nid값: {}"+
-//                            "\n제목: {}"+
-//                            "\n내용: {}"+
-//                            "\n작성자: {}"+
-//                            "\n********************불러온게시물********************",
-//                    post.getId(), post.getTitle(), post.getContent(), post.getUserInfo().getUsername()
-//            );
-
-
+            Long likeCount = likeService.countLike(post.getId());
+            post.setLikeCount(likeCount);
         }
+
+        // 로깅을 통해 작성일 값 확인
+//        for (Post post : postList) {
+//
+////            log.info("getPostList()메소드가 실행되었습니다.\n" +
+////                            "********************불러온게시물********************"+
+////                            "\nid값: {}"+
+////                            "\n제목: {}"+
+////                            "\n내용: {}"+
+////                            "\n작성자: {}"+
+////                            "\n********************불러온게시물********************",
+////                    post.getId(), post.getTitle(), post.getContent(), post.getUserInfo().getUsername()
+////            );
+//
+//
+//        }
 
         return postList;
     }
