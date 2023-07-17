@@ -3,6 +3,7 @@ package com.nth.service;
 import com.nth.domain.CommentsLike;
 import com.nth.mapper.CommentsLikeMapper;
 import lombok.RequiredArgsConstructor;
+import org.mybatis.spring.MyBatisSystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,11 @@ public class CommentsLikeService {
      * @return 좋아요 중복 체크
      */
     public CommentsLike duplicationLike(CommentsLike like) {
-        log.info("duplicationLike()가 실행되었습니다." +
+        log.info("duplicationLike() 댓글 추천 중복체크가 실행되었습니다." +
                 "like.commentid:{} like.userid:{}", like.getCommentId(), like.getUserId()); // 수정된 부분
         CommentsLike Likes = commentsLikeMapper.duplicationLike(like);
         if (Likes == null) {
-            log.info("Likes가 null임");
+            log.info("댓글 Likes가 null 입니다. 즉 추천이 가능합니다.");
         }
         return Likes;
     }

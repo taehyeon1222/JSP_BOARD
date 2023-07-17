@@ -3,6 +3,7 @@ package com.nth.service;
 import com.nth.domain.Like;
 import com.nth.mapper.LikeMapper;
 import lombok.RequiredArgsConstructor;
+import org.mybatis.spring.MyBatisSystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,14 @@ public class LikeService{
 
     private final LikeMapper likeMapper;
 
+   // private final PostService postService;
+
     public void insertLike(Like like) {
         log.info("insertLike()가 실행되었습니다.");
+        if(like.getPostId()==null){
+          log.info("insertLike()가 null 입니다.{}",like.getPostId());
+        }
+
         likeMapper.insertLike(like);
     }
 
@@ -29,8 +36,15 @@ public class LikeService{
         log.info("duplicationLike()가 실행되었습니다." +
                 "like.postid:{} like.userid:{}",like.getPostId(),like.getUserId());
         Like Likes = likeMapper.duplicationLike(like);
+
+//        if(!postService.postIdcheck(like.getPostId())){
+//            log.info("게시물이 없습니다.");
+//            throw new MyBatisSystemException(new Throwable());
+//        }
+
         if (Likes == null) {
-            log.info("Likes가 null임");
+            log.info("Likes가 null임.");
+            //throw new MyBatisSystemException(new Throwable());
         }
         return Likes;
     }

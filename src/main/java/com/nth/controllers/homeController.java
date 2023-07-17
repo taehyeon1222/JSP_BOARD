@@ -24,7 +24,9 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,6 +38,8 @@ public class homeController {
     private final PostService postService;
 
     private final CommentsService commentsService;
+
+    private final CommentsLikeService commentsLikeService;
 
     private final UserInfoService userInfoService;
     private final LikeService likeService;
@@ -71,36 +75,35 @@ public class homeController {
     //게시글 상세보기
     @GetMapping("/post/{id}")
     public String getPostById(@PathVariable long id, Model model) {
-        //Post post = postMapper.getPostById(id);
-        model.addAttribute("formActionUrl", "/comments"); //게시글의 댓글을 위해 추가함
         Post post = postService.getPostById(id);
-
-        List<Comments> comments = commentsService.getCommentsByPostId(id); // 댓글출력
-
-//        log.info("@GetMapping(\"/post/{id}\") 가 실행되었습니다.\n\n"+
-//                 "post.getTitle():{}"+post.getTitle()+
-//                "\npost.getContent(){}:"+post.getContent()+
-//                "\npost.getId():{}"+post.getId()+
-//                "\n 날짜 :{}"+post.getCreatedDate()+
-//
-//                "\npost.getUserInfo():{}"+post.getUserInfo().getUsername()
-      //  ); // 불러온글 로그
+        model.addAttribute("formActionUrl", "/comments");
+        List<Comments> comments = commentsService.getCommentsByPostId(id);
+        Map<Long, Long> commentLikes = new HashMap<>();
+        for (Comments comment : comments) {
+            Long commentId = comment.getId();
+            Long commentLikeCount = commentsLikeService.countLike(commentId);
+            commentLikes.put(commentId, commentLikeCount);
+        }
         Long Likecount = likeService.countLike(post.getId());
-        model.addAttribute("like", Likecount); // 게시글추천데이터
-        model.addAttribute("post", post); // 게시글데이터
-        model.addAttribute("comments", comments); //댓글 데이터
+
+        model.addAttribute("commentLikeCount", commentLikes);
+        model.addAttribute("like", Likecount);
+        model.addAttribute("post", post);
+        model.addAttribute("comments", comments);
+
         return "post_detail";
     }
+
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public String createPost(@Valid PostForm postForm,BindingResult result,Principal principal
     ,Model model, RedirectAttributes redirectAttributes) {
-
         String errorResult = validateCheck(result,postForm,redirectAttributes);
+        // 유효성 검사 메서드
         if (errorResult != null) {
             return errorResult;
-        } // 유효성 검사
+        }
            UserInfo userInfo = userInfoService.findByUsername(principal.getName());
            Post post = postService.createIdPost(postForm, userInfo);
            Long postid = post.getId();

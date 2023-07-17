@@ -52,8 +52,18 @@ public class PostService {
             throw new MyBatisSystemException(new Throwable("게시물 id " + id));
         }
         return post;
+    }
 
-
+    /**
+     *
+     * @param postId
+     * @return 게시물 존재 여부 체크
+     */
+    public boolean postIdcheck(Long postId) {
+        log.info("postIdcheck가 실행되었습니다.{},의 게시물의 존재여부 : ",postId);
+        Post post = postMapper.getPostById(postId);
+        log.info("게시물의 존재여부 : ",post != null);
+        return post != null;
     }
 
 

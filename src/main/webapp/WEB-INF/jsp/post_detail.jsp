@@ -8,7 +8,7 @@
 <p>Title: ${post.title}</p>
 <p>작성자: ${post.userInfo.username}</p>
 <p>Content: ${post.content}</p>
-<p>Content: ${like}</p>
+<p>추천수: ${like}</p>
 <!-- 추천의 시작-->
 
 <a href="/post/${post.id}/like">추천</a>
@@ -52,6 +52,7 @@ and post.author != null and principal.username == post.author.username))">
         <p>${comment.content}</p>
         <p>작성시간: ${comment.createdDate}</p>
         <p>게시글 id : ${comment.postId}</p>
+        <p>Likes: ${commentLikeCount[comment.id]}</p>
         <a href="/post/${comment.postId}/comment/${comment.id}/like">추천</a>
 
 

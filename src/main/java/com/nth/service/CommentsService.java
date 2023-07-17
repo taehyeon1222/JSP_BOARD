@@ -21,6 +21,19 @@ public class CommentsService {
         this.commentsMapper = commentsMapper;
     }
 
+
+    /**
+     *
+     * @param commentId
+     * @return 코멘트ID로 값을 받아서 댓글이 존재하는지 결과를 반환합니다.
+     */
+    public boolean commentIdcheck(Long commentId) {
+        log.info("postIdcheck가 실행되었습니다.{},의 게시물의 존재여부 : ",commentId);
+        Comments comments = commentsMapper.getCommentById(commentId);
+        log.info("게시물의 존재여부 : ",comments != null);
+        return comments != null;
+    }
+
     /**
      *
      * @param comment
