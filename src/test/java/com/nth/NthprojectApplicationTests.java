@@ -166,8 +166,20 @@ class NthprojectApplicationTests {
             System.out.println("Match found: UserId = " + result.getUserId() + ", PostId = " + result.getPostId());
         }
 
-        assertNotNull(result);  // 이 부분은 result가 null이 아니어야 테스트가 통과하는 assert입니다.
+        assertNotNull(result);
     }
+
+    @Test
+    public void test4(){
+
+        Post post = new Post();
+        post = postMapper.getPostById(367l);
+        postService.increaseViewCount(367L);
+        assertEquals(1, post.getViews());
+    }
+
+
+
 
 }
 

@@ -36,7 +36,6 @@ public class LikeController {
     private final CommentsLikeService commentsLikeService;
 
 
-
     //댓글
     @GetMapping("/post/{postId}/comment/{commentId}/like")
     public String insertCommentLike(@PathVariable long postId, @PathVariable long commentId, Principal principal, RedirectAttributes redirectAttributes){
@@ -55,8 +54,6 @@ public class LikeController {
             redirectAttributes.addFlashAttribute("errorMessage","댓글이 존재 하지 않습니다.");
             return "redirect:/post/"+postId;
         }
-
-
         String username = principal.getName(); // 사용자 이름 리턴
         UserInfo user = userInfoService.findByUsername(username); //사용자 정보 반환
 
@@ -113,24 +110,23 @@ public class LikeController {
 
         // Like 서비스를 사용해 사용자가 이미 좋아요를 눌렀는지 확인합니다.
         Like resultLike = likeService.duplicationLike(like);
-
-        // resultLike가 null이 아니면, 로그를 출력합니다.
-        if (resultLike != null) {
-            likeService.deleteLike(like);
-            Long count = likeService.countLike(postId);
-            log.info("좋아요를 취소했습니다.현재 좋아요:{}",count);
-            log.info("resultLike={}",resultLike.getUserId());
-            return "redirect:/post/"+postId;
-
-        } if(resultLike == null){
-            // Like 서비스를 사용해 Like 정보를 DB에 저장합니다.
-            likeService.insertLike(like);
-            Long count = likeService.countLike(postId);
-            log.info("좋아요를 완료했습니다..현재 좋아요:{}",count);
-        }
-
+        toggleLikeStatus(like);
+        Long count = likeService.countLike(postId);
+        log.info("좋아요를 완료했습니다 현재 게시글 좋아요 수 :{}",count);
         return "redirect:/post/"+postId;
     }
+
+    private void toggleLikeStatus(Like like){
+        Like existingLike = likeService.duplicationLike(like);
+        if (existingLike != null) {
+            likeService.deleteLike(like);
+        } else {
+            likeService.insertLike(like);
+        }
+    }
+
+
+
 
 
 

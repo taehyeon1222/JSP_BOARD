@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -58,24 +60,49 @@ public class homeController {
 
     @GetMapping("/post")
     public String getPostList(Model model,
+                              @RequestParam(defaultValue = "") String keyword,
                               @RequestParam(defaultValue = "1") int page,
-                              @RequestParam(defaultValue = "1") int range) {
+                              @RequestParam(defaultValue = "1") int range,
+                              @RequestParam(defaultValue = "title") String searchType) {
         log.info("GetMapping(\"/post\")가 호출됨");
-        int listCnt = postService.getPostCount(); // 전체 게시글 수
-        Pagination pagination = new Pagination();
-        pagination.pageInfo(page, range, listCnt);
-        //pagination.pageconfig(5 ,5); 페이지 설정
 
-        List<Post> postList = postService.getPostList(pagination);
-        model.addAttribute("postList", postList);
+        Pagination pagination = new Pagination();
+        List<Post> postList;
+        int listCount;
+
+
+        switch(searchType) {
+            case "title":
+                log.info("제목과 내용으로 검색");
+                listCount = postService.getPostCountByTitle(keyword);
+                pagination.pageInfo(page, range, listCount); //페이징 설정
+                pagination.setTotalCount(listCount);
+                postList = postService.searchPostList(keyword, pagination);
+                break;
+            case "userId":
+                log.info("아이디로검색이 선택됨");
+                listCount = postService.getPostCountByUserId(keyword);
+                pagination.pageInfo(page, range, listCount); //페이징 설정
+                pagination.setTotalCount(listCount);
+                postList = postService.searchPostIdList(keyword,pagination);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid searchType: " + searchType);
+        }
+
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("searchType", searchType);
         model.addAttribute("pagination", pagination);
+        model.addAttribute("postList", postList);
+
         return "postList";
     }
 
+
     //게시글 상세보기
     @GetMapping("/post/{id}")
-    public String getPostById(@PathVariable long id, Model model) {
-        Post post = postService.getPostById(id);
+    public String getPostById(@PathVariable long id, Model model ,Principal principal) {
+        Post post = postService.viewPost(id);
         model.addAttribute("formActionUrl", "/comments");
         List<Comments> comments = commentsService.getCommentsByPostId(id);
         Map<Long, Long> commentLikes = new HashMap<>();
@@ -85,6 +112,10 @@ public class homeController {
             commentLikes.put(commentId, commentLikeCount);
         }
         Long Likecount = likeService.countLike(post.getId());
+
+
+        boolean canEdit = adminCheck(principal,post); //관리자권한 및 게시글작성자와 접속유저 체크
+        model.addAttribute("canEdit", canEdit);//관리자권한 혹은 게시글 권한이 있을경우 수정/삭제 버튼 활성화
 
         model.addAttribute("commentLikeCount", commentLikes);
         model.addAttribute("like", Likecount);
@@ -140,7 +171,7 @@ public class homeController {
             log.info("redirectPage가 실행됨");
             return redirectPage;
         }
-
+        // Admin or author, continue editing the post.
         PostForm postForm = new PostForm();
         postForm.setTitle(post.getTitle());
         postForm.setContent(post.getContent());
@@ -148,6 +179,7 @@ public class homeController {
         model.addAttribute("postForm", postForm);
         return "postcreate";
     }
+
 
     @PostMapping("/post/modify/{id}")
     public String modifyPost(@PathVariable long id, @Valid PostForm postForm, BindingResult result) {
@@ -163,27 +195,56 @@ public class homeController {
     }
 
 
-
+    /**
+     * @param post
+     * @param principal
+     * @param redirectAttributes
+     * @param errorMessage 에러메세지
+     * @return 인증된 사용자인지 체크하고 리다이렉트 및 오류메세지
+     */
     public String checkAuthorAccess(Post post,Principal principal, RedirectAttributes redirectAttributes,
                                                  String errorMessage) {
-        if (principal == null) {
-            log.info("checkPostPermissionAndRedirect()실행됨\n" +
-                    "인증되지 않은 사용자에 의한 시도." +
-                    "\n요청된 게시글 작성자: {}" +
-                    "\n현재 로그인상태 : {}", post.getUserInfo().getUsername(), !(principal == null));
+        if (principal == null) { //객체 검증
+            log.info("checkPostPermissionAndRedirect()실행됨\n인증되지 않은 사용자에 의한 시도.\n요청된 게시글 작성자: {}\n현재 로그인상태 : {}", post.getUserInfo().getUsername(), !(principal == null));
+
             redirectAttributes.addFlashAttribute("errorMessage", "게시글"+errorMessage +"권한이 없습니다.1");
             return "redirect:/post/" + post.getId();
-        } else if (!post.getUserInfo().getUsername().equals(principal.getName())) {
-            log.info("checkPostPermissionAndRedirect()메소드 실행됨\n" +
-                    "\n요청된 게시글 작성자:{}" +
-                    "\n현재 로그인한 사용자:{}", post.getUserInfo().getUsername(), principal.getName());
-            redirectAttributes.addFlashAttribute("errorMessage", "게시글"+errorMessage +"권한이 없습니다.1");
+        // 어드민권한 체크
+        } else if ((SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))) {
+            return null;
+        }
+        //작성자와 현재 접속한 유저 이름 체크
+        else if (!post.getUserInfo().getUsername().equals(principal.getName())) {
+            log.info("checkPostPermissionAndRedirect()메소드 실행됨\n요청된 게시글 작성자:{}\n현재 로그인한 사용자:{}", post.getUserInfo().getUsername(), principal.getName());
+            redirectAttributes.addFlashAttribute("errorMessage", "게시글"+errorMessage +"권한이 없습니다.2");
             return "redirect:/post/" + post.getId();
         }
         return null;
         }
 
+    /**
+     *
+     * @param principal
+     * @param post
+     * @return 어드민권한을 가지고 있을경우 버튼 활성화.
+     */
+    public boolean adminCheck(Principal principal,Post post){
+            boolean canEdit = SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
+                    (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) ||
+                            (principal != null && post.getUserInfo().getUsername().equals(principal.getName())));
 
+        log.info("adminCheck()메소드실행됨\n,게시글유저이름:{},유저권한{}",post.getUserInfo().getUsername(),SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")));
+            return canEdit;
+        }
+
+
+    /**
+     *
+     * @param bindingResult 유효성 검사 결과
+     * @param postForm 검증할 폼
+     * @param redirectAttributes 에러메세지
+     * @return 유효성 검사
+     */
     private String validateCheck(BindingResult bindingResult,PostForm postForm, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             // 폼 검증 실패 시 에러 메시지 추가

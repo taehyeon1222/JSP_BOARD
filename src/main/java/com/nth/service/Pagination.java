@@ -22,6 +22,7 @@ public class Pagination {
     private int endPage;
     private boolean prev;
     private boolean next;
+    private int totalCount; // 총 게시글수
 
     /**
      * 페이지설정
@@ -38,6 +39,13 @@ public class Pagination {
                 "페이지범위 = {} 변수명:rangeSize\n"+
                 "-------------------------------------------------------\n",listSize,rangeSize);
     }
+
+    /**
+     *
+     * @param page 현재페이지 번호
+     * @param range 페이지갯수
+     * @param listCnt 전체페이지갯수
+     */
 
     public void pageInfo(int page, int range, int listCnt) {
         this.page = page;

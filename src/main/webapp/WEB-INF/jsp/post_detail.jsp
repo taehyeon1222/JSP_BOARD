@@ -8,20 +8,12 @@
 <p>Title: ${post.title}</p>
 <p>작성자: ${post.userInfo.username}</p>
 <p>Content: ${post.content}</p>
+<p>조회수 : ${post.views}</p>
 <p>추천수: ${like}</p>
 <!-- 추천의 시작-->
 
 <a href="/post/${post.id}/like">추천</a>
-<!---------------------------------------게시글 삭제 수정버튼의 시작---------------------------------->
-<sec:authorize access="isAuthenticated() and (hasRole('ROLE_ADMIN') or (hasRole('ROLE_USER')
-and post.author != null and principal.username == post.author.username))">
-    <a href="/post/delete/${post.id}">게시글 삭제</a>
-</sec:authorize>
-<sec:authorize access="isAuthenticated() and (hasRole('ROLE_ADMIN') or (hasRole('ROLE_USER')
-and post.author != null and principal.username == post.author.username))">
-    <a href="/post/modify/${post.id}">게시글 수정</a>
-</sec:authorize>
-<!---------------------------------------게시글 삭제 수정버튼의 끝------------------------------------>
+
 
 
 <!-------------------------------------------에러메세지출력의시작---------------------------------------->
@@ -29,7 +21,14 @@ and post.author != null and principal.username == post.author.username))">
     <div class="error-message">${errorMessage}</div>
 </c:if>
 <!-------------------------------------------에러메세지출력 끝----------------------------------------------------------->
-
+<!--게시글 수정 및 삭제 버튼-->
+<c:if test="${canEdit}">
+    <sec:authorize access="isAuthenticated() and (hasRole('ROLE_ADMIN') or hasRole('ROLE_USER'))">
+        <a href="/post/delete/${post.id}">게시글 삭제</a>
+        <a href="/post/modify/${post.id}">게시글 수정</a>
+    </sec:authorize>
+</c:if>
+<!--게시글 수정 및 삭제 버튼-->
 
 <!-------------------------------------------에러메세지출력----------------------------------------------------------->
 <c:if test="${not empty errors}">
@@ -55,22 +54,17 @@ and post.author != null and principal.username == post.author.username))">
         <p>Likes: ${commentLikeCount[comment.id]}</p>
         <a href="/post/${comment.postId}/comment/${comment.id}/like">추천</a>
 
-
-        <!---------------------------------------댓글 삭제및수정버튼의 시작---------------------------------->
-
-        <sec:authorize access="isAuthenticated() and (hasRole('ROLE_ADMIN') or (hasRole('ROLE_USER')and
-        post.author != null and
-        rincipal.username == post.author.username))">
-            <a href="/post/${post.id}/delete/${comment.id}">댓글 삭제</a>
-        </sec:authorize>
-        <sec:authorize access="isAuthenticated() and (hasRole('ROLE_ADMIN') or (hasRole('ROLE_USER')and
-        post.author != null and
-        principal.username == post.author.username))">
-            <a href="/post/${post.id}/c/modify/${comment.id}#commentForm">댓글 수정</a>
-        </sec:authorize>
-        <!---------------------------------------댓글 삭제및수정버튼의 끝------------------------------------>
+        <c:if test="${canEdit}">
+            <sec:authorize access="isAuthenticated() and (hasRole('ROLE_ADMIN') or hasRole('ROLE_USER'))">
+                <a href="/post/${post.id}/delete/${comment.id}">댓글 삭제</a>
+                <a href="/post/${post.id}/c/modify/${comment.id}#commentForm">댓글 수정</a>
+            </sec:authorize>
+        </c:if>
 
     </c:forEach>
+
+
+
 </div><!-------------------------------------------댓글출력의 끝----------------------------------------------------------->
 
 
@@ -78,7 +72,7 @@ and post.author != null and principal.username == post.author.username))">
 
 
 
-<!-------------------------------------------댓글폼----------------------------------------------------------->
+<!-------------------------------------------댓글작성 폼----------------------------------------------------------->
 댓글생성
 <div id="commentForm">
 <form class="id" action="${formActionUrl}" method="post">

@@ -13,7 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -51,8 +53,17 @@ public class PostService {
             log.info("getPostById():게시물을 불러올수가 없습니다.");
             throw new MyBatisSystemException(new Throwable("게시물 id " + id));
         }
+        //increaseViewCount(id);
         return post;
     }
+
+    public Post viewPost(Long id){
+        log.info("viewPost({})가 실행되었습니다",id);
+        Post post = postMapper.getPostById(id);
+        increaseViewCount(id);
+        return post;
+    }
+
 
     /**
      *
@@ -167,6 +178,50 @@ public class PostService {
 
         return postList;
     }
+
+    public List<Post> searchPostList(String kw, Pagination pagination) {
+        log.info("searchPostList()가 실행됨\n입력된검색어:{}",kw);
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("title", kw);
+        paramMap.put("startList", pagination.getStartList());
+        paramMap.put("listSize", pagination.getListSize());
+        return postMapper.searchPostList(paramMap);
+    }
+
+    public List<Post> searchPostIdList(String username, Pagination pagination) {
+        log.info("searchPostIdList()가 실행됨\n입력된검색어:{}",username);
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("username", username);
+        paramMap.put("startList", pagination.getStartList());
+        paramMap.put("listSize", pagination.getListSize());
+        return postMapper.searchPostIdList(paramMap);
+    }
+
+
+
+    public int getPostCountByTitle(String s) {
+        int result = postMapper.getPostCountByTitle(s);
+        log.info("getPostCountByTitle({})가 실행되었습니다.\n 검색된 게시글 수의 반환값:{}",s,result);
+        return result;
+    }
+
+
+    public int getPostCountByUserId(String userId) {
+        int result = postMapper.getPostCountByUserId(userId);
+        log.info("getPostCountByUserId({})가 실행되었습니다.\n 검색된 게시글 수의 반환값:{}",userId,result);
+        return result;
+    }
+
+    /**
+    조회수
+     */
+    public void increaseViewCount(Long id) {
+        postMapper.increaseViewCount(id);
+    }
+
+
+
+
 
 
 

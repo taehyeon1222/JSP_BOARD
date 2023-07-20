@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper()
 public interface PostMapper {
@@ -20,6 +21,18 @@ public interface PostMapper {
     List<Post> getPostList(Pagination pagination);
     int getPostCount(); // 게시글 총 개수를 반환하는 메소드
 
-    }
+    int getPostCountByTitle(String search); //검색 게시글 총 개수를 반환하는 메소드
+
+    int getPostCountByUserId(String userId);
+
+
+    List<Post> searchPostList(Map<String, Object> params); //검색
+
+    List<Post> searchPostIdList(Map<String, Object> params); //아이디 검색
+
+    void increaseViewCount(Long id); //조회수
+
+
+}
 
 

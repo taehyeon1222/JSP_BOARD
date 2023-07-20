@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nth.mapper.PostMapper">
+
     <select id="getAllPosts" resultType="com.nth.domain.Post">
         SELECT * FROM POST
     </select>
@@ -13,9 +14,9 @@
 -->
     <!--게시글 조인 조회-->
     <select id="getPostById" parameterType="long" resultType="com.nth.domain.Post">
-        SELECT P.ID, P.TITLE, P.CONTENT, P.CREATED_DATE AS createdDate, P.USER_ID AS userId,
+        SELECT P.ID, P.TITLE, P.CONTENT, P.CREATED_DATE AS createdDate, P.USER_ID AS userId, P.VIEWS AS views,
                U.ID AS "userInfo.id", U.USERNAME AS "userInfo.username",
-               U.PASSWORD AS "userInfo.password", U.CREATED_AT AS "userInfo.createdDate"
+               U.CREATED_AT AS "userInfo.createdDate"
         FROM "POST" P
                  JOIN "USERINFO" U ON P.USER_ID = U.ID
         WHERE P.ID = #{id}
@@ -41,10 +42,6 @@
         VALUES (#{id}, #{title}, #{content}, SYSDATE, #{userInfo.id})
     </insert>
 
-
-
-
-
     <update id="updatePost" parameterType="com.nth.domain.Post">
         UPDATE POST SET TITLE = #{title}, CONTENT = #{content} WHERE ID = #{id}
     </update>
@@ -54,16 +51,62 @@
         DELETE FROM POST WHERE ID = #{id}
     </delete>
 
+    <!--검색
+    <select id="searchPostList" resultType="com.nth.domain.Post" parameterType="map">
+        SELECT * FROM (
+                          SELECT ROW_NUMBER() OVER (ORDER BY id DESC) row_num, Post.*
+                          FROM Post
+                          WHERE title LIKE '%'||#{title}||'%'
+                      )
+        WHERE row_num BETWEEN #{startList}+1 AND #{startList}+#{listSize}
+    </select>
+-->
+    <!--제목과 내용으로 검색 후 페이징-->
+    <select id="searchPostList" resultType="com.nth.domain.Post" parameterType="map">
+        SELECT P.id, P.title, P.content, P.views AS views, P.created_date as createdDate,
+               U.ID AS "userInfo.id", U.USERNAME AS "userInfo.username",
+               U.PASSWORD AS "userInfo.password", U.CREATED_AT AS "userInfo.createdDate",
+               COALESCE(L.CNT, 0) AS "likeCount"
+        FROM (
+                 SELECT ROW_NUMBER() OVER (ORDER BY id DESC) row_num, Post.*
+                 FROM Post
+                 WHERE title LIKE '%'||#{title}||'%' OR content LIKE '%'||#{title}||'%'
+             ) P
+                 JOIN "USERINFO" U ON P.user_id = U.id
+                 LEFT JOIN (
+            SELECT post_id, COUNT(*) as CNT FROM likes GROUP BY post_id
+        ) L ON P.ID = L.post_id
+        WHERE row_num BETWEEN #{startList}+1 AND #{startList}+#{listSize}
+    </select>
 
 
-    <!--페이징-->
+    <select id="searchPostIdList" resultType="com.nth.domain.Post" parameterType="map">
+        SELECT P.id, P.title, P.views, P.created_date AS createdDate,
+               P.userId AS "userInfo.id", P.username AS "userInfo.username",
+               COALESCE(L.CNT, 0) AS "likeCount"
+        FROM (
+                 SELECT ROW_NUMBER() OVER (ORDER BY P.id DESC) row_num, P.*, U.username, U.id AS userId
+                 FROM post P
+                          JOIN userinfo U ON P.user_id = U.id
+                 WHERE U.username LIKE '%'||#{username}||'%'
+             ) P
+                 LEFT JOIN (
+            SELECT post_id, COUNT(*) as CNT FROM likes GROUP BY post_id
+        ) L ON P.ID = L.post_id
+        WHERE row_num BETWEEN #{startList}+1 AND #{startList}+#{listSize}
+    </select>
+
+
+
+
+    <!--페이징 이제 사용하지 않음 검색기능이 없음-->
     <select id="getPostList" resultType="com.nth.domain.Post" parameterType="com.nth.service.Pagination">
-        SELECT P.id, P.title, P.content, P.created_date as createdDate, U.ID AS "userInfo.id", U.USERNAME AS "userInfo.username",
+        SELECT P.id, P.title, P.content, P.created_date as createdDate,  P.views AS views ,U.ID AS "userInfo.id", U.USERNAME AS "userInfo.username",
                U.PASSWORD AS "userInfo.password", U.CREATED_AT AS "userInfo.createdDate"
         FROM (
                  SELECT ROW_NUMBER() OVER (ORDER BY id DESC) row_num, Post.*
                  FROM Post
-             ) P
+             ) p
                  JOIN "USERINFO" U ON P.USER_ID = U.ID
         WHERE row_num BETWEEN #{startList}+1 AND #{startList}+#{listSize}
     </select>
@@ -73,6 +116,26 @@
     <select id="getPostCount" resultType="int">
         SELECT COUNT(*) FROM Post
     </select>
+
+    <!--페이징 카운트 검색 쿼리-->
+    <select id="getPostCountByTitle" resultType="int" parameterType="string">
+        SELECT COUNT(*) FROM Post WHERE title LIKE '%'||#{title}||'%' OR content LIKE '%'||#{title}||'%'
+    </select>
+    <!--SELECT COUNT(*) FROM Post WHERE title LIKE '%'||#{title}||'%' -->
+
+    <!--유저 아이디 카운트 검색 쿼리-->
+    <select id="getPostCountByUserId" resultType="int" parameterType="string">
+        SELECT COUNT(*)
+        FROM Post P
+                 INNER JOIN USERINFO U ON P.USER_ID = U.ID
+        WHERE U.USERNAME = #{userName}
+    </select>
+
+    <!--조회수-->
+    <update id="increaseViewCount" parameterType="long">
+        UPDATE Post SET views = views + 1 WHERE id = #{id}
+    </update>
+
 
 
 
