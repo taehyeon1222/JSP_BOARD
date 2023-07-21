@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nth.mapper.CommentsLikeMapper">
+    <!--좋아요증가-->
+    <insert id="insertLike" parameterType="com.nth.domain.CommentsLike">
+        INSERT INTO comment_Likes (user_id,comment_id) VALUES (#{userId}, #{commentId})
+    </insert>
+
+    <!--좋아요 중복체크-->
+    <select id="duplicationLike" parameterType="com.nth.domain.CommentsLike" resultType="com.nth.domain.CommentsLike">
+        SELECT user_id AS userId, comment_id AS commentId FROM comment_Likes WHERE user_id = #{userId} AND comment_id = #{commentId}
+    </select>
+
+
+    <!--좋아요 삭제 -->
+    <delete id="deleteLike" parameterType="com.nth.domain.CommentsLike">
+        DELETE FROM comment_Likes WHERE user_id = #{userId} AND comment_id = #{commentId}
+    </delete>
+
+    <!--좋아요수체크 -->
+    <select id="countLike" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM comment_Likes WHERE comment_id = #{commentId}
+    </select>
+
+
+</mapper>
