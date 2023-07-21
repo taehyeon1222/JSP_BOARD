@@ -65,7 +65,6 @@
     <select id="searchPostList" resultType="com.nth.domain.Post" parameterType="map">
         SELECT P.id, P.title, P.content, P.views AS views, P.created_date as createdDate,
                U.ID AS "userInfo.id", U.USERNAME AS "userInfo.username",
-               U.PASSWORD AS "userInfo.password", U.CREATED_AT AS "userInfo.createdDate",
                COALESCE(L.CNT, 0) AS "likeCount"
         FROM (
                  SELECT ROW_NUMBER() OVER (ORDER BY id DESC) row_num, Post.*
@@ -102,7 +101,7 @@
     <!--페이징 이제 사용하지 않음 검색기능이 없음-->
     <select id="getPostList" resultType="com.nth.domain.Post" parameterType="com.nth.service.Pagination">
         SELECT P.id, P.title, P.content, P.created_date as createdDate,  P.views AS views ,U.ID AS "userInfo.id", U.USERNAME AS "userInfo.username",
-               U.PASSWORD AS "userInfo.password", U.CREATED_AT AS "userInfo.createdDate"
+              U.CREATED_AT AS "userInfo.createdDate"
         FROM (
                  SELECT ROW_NUMBER() OVER (ORDER BY id DESC) row_num, Post.*
                  FROM Post
@@ -128,8 +127,9 @@
         SELECT COUNT(*)
         FROM Post P
                  INNER JOIN USERINFO U ON P.USER_ID = U.ID
-        WHERE U.USERNAME = #{userName}
+        WHERE U.USERNAME LIKE '%' || #{userName} || '%'
     </select>
+
 
     <!--조회수-->
     <update id="increaseViewCount" parameterType="long">
