@@ -19,5 +19,8 @@ public class UserInfo {
     username VARCHAR2(50) NOT NULL,
     password VARCHAR2(100) NOT NULL,
     created_at DATE DEFAULT SYSDATE
+
+
+    //ON DELETE CASCADE
 );
 */

@@ -23,12 +23,12 @@ public interface PostMapper {
 
     int getPostCountByTitle(String search); //검색 게시글 총 개수를 반환하는 메소드
 
-    int getPostCountByUserId(String userId);
+    int getPostCountByUserName(String userId);
 
 
     List<Post> searchPostList(Map<String, Object> params); //검색
 
-    List<Post> searchPostIdList(Map<String, Object> params); //아이디 검색
+    List<Post> searchPostUsernameList(Map<String, Object> params); //아이디 검색
 
     void increaseViewCount(Long id); //조회수
 

@@ -33,7 +33,7 @@
         DELETE FROM COMMENTS WHERE ID = #{id}
     </delete>
 
-
+<!-- 댓글 수정-->
     <update id="updateComment" parameterType="com.nth.domain.Comments">
         UPDATE COMMENTS SET content = #{content} WHERE ID = #{id}
     </update>
@@ -46,6 +46,7 @@
     </select>
 -->
 
+    <!--하나의 댓글을 불러옵니다.-->
     <select id="getCommentById" resultType="com.nth.domain.Comments" parameterType="java.lang.Long">
         SELECT
         c.ID,
@@ -59,6 +60,63 @@
         LEFT JOIN USERINFO u ON c.USER_ID = u.ID
         WHERE c.id = #{id}
     </select>
+
+    <!--유저 아이디로 댓글 정보 얻기
+    <select id="getCommentsByUserIds" resultType="com.nth.domain.Comment" parameterType="map">
+        SELECT C.id, C.content, C.post_id AS postId, C.created_date AS createdDate
+        FROM COMMENTS C
+        WHERE C.user_id = #{userId}
+        ORDER BY C.CREATED_DATE DESC
+            LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+-->
+
+<!--유저 아이디로 페이징처리
+    <select id="getCommentsByUserId" resultType="com.nth.domain.Comments" parameterType="map">
+        SELECT C.id, C.content, C.post_id AS postId, C.user_id AS userId, C.created_date AS createdDate,
+               U.ID AS "userInfo.id", U.USERNAME AS "userInfo.username"
+        FROM (
+                 SELECT ROW_NUMBER() OVER (ORDER BY created_date DESC) row_num, C.*, U.id AS userId, U.username
+                 FROM comments C
+                 JOIN userinfo U ON C.user_id = U.id
+                 WHERE U.username = #{username}
+             ) C
+        WHERE row_num BETWEEN #{startList}+1 AND #{startList}+#{listSize}
+        ORDER BY C.row_num ASC
+    </select>
+    -->
+
+
+    <select id="getCommentsByUserId" resultType="com.nth.domain.Comments" parameterType="map">
+        SELECT C.id, C.content, C.post_id AS postId, C.user_id AS userId, C.created_date AS createdDate,
+               C.userId AS "userInfo.id", C.username AS "userInfo.username", C.title,
+               COALESCE(L.CNT, 0) AS likeCount
+        FROM (
+                 SELECT ROW_NUMBER() OVER (ORDER BY C.created_date DESC) row_num, C.*, U.id AS userId, U.username, P.title AS title
+                 FROM comments C
+                          JOIN userinfo U ON C.user_id = U.id
+                          JOIN post P ON C.post_id = P.id
+                 WHERE U.username = #{username}
+             ) C
+                 LEFT JOIN (
+            SELECT COMMENT_ID, COUNT(*) as CNT FROM COMMENT_likes GROUP BY COMMENT_ID
+        ) L ON C.ID = L.comment_id
+        WHERE C.row_num BETWEEN #{startList}+1 AND #{startList}+#{listSize}
+        ORDER BY C.row_num ASC
+    </select>
+
+
+        <!--댓글수-->
+    <select id="getCommentsCountByUserName" resultType="int" parameterType="string">
+        SELECT COUNT(*)
+        FROM comments C
+                 INNER JOIN USERINFO U ON C.USER_ID = U.ID
+        WHERE U.USERNAME LIKE '%' || #{userName} || '%'
+    </select>
+
+
+
+
 
 
 

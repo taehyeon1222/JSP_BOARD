@@ -67,7 +67,7 @@
                U.ID AS "userInfo.id", U.USERNAME AS "userInfo.username",
                COALESCE(L.CNT, 0) AS "likeCount"
         FROM (
-                 SELECT ROW_NUMBER() OVER (ORDER BY id DESC) row_num, Post.*
+                 SELECT ROW_NUMBER() OVER (ORDER BY created_date DESC) row_num, Post.*
                  FROM Post
                  WHERE title LIKE '%'||#{title}||'%' OR content LIKE '%'||#{title}||'%'
              ) P
@@ -79,12 +79,12 @@
     </select>
 
 
-    <select id="searchPostIdList" resultType="com.nth.domain.Post" parameterType="map">
+    <select id="searchPostUsernameList" resultType="com.nth.domain.Post" parameterType="map">
         SELECT P.id, P.title, P.views, P.created_date AS createdDate,
                P.userId AS "userInfo.id", P.username AS "userInfo.username",
                COALESCE(L.CNT, 0) AS "likeCount"
         FROM (
-                 SELECT ROW_NUMBER() OVER (ORDER BY P.id DESC) row_num, P.*, U.username, U.id AS userId
+                 SELECT ROW_NUMBER() OVER (ORDER BY created_date DESC) row_num, P.*, U.username, U.id AS userId
                  FROM post P
                           JOIN userinfo U ON P.user_id = U.id
                  WHERE U.username LIKE '%'||#{username}||'%'
@@ -93,6 +93,7 @@
             SELECT post_id, COUNT(*) as CNT FROM likes GROUP BY post_id
         ) L ON P.ID = L.post_id
         WHERE row_num BETWEEN #{startList}+1 AND #{startList}+#{listSize}
+        ORDER BY P.row_num
     </select>
 
 
@@ -103,7 +104,7 @@
         SELECT P.id, P.title, P.content, P.created_date as createdDate,  P.views AS views ,U.ID AS "userInfo.id", U.USERNAME AS "userInfo.username",
               U.CREATED_AT AS "userInfo.createdDate"
         FROM (
-                 SELECT ROW_NUMBER() OVER (ORDER BY id DESC) row_num, Post.*
+                 SELECT ROW_NUMBER() OVER (ORDER BY created_date DESC) row_num, Post.*
                  FROM Post
              ) p
                  JOIN "USERINFO" U ON P.USER_ID = U.ID
@@ -123,7 +124,7 @@
     <!--SELECT COUNT(*) FROM Post WHERE title LIKE '%'||#{title}||'%' -->
 
     <!--유저 아이디 카운트 검색 쿼리-->
-    <select id="getPostCountByUserId" resultType="int" parameterType="string">
+    <select id="getPostCountByUserName" resultType="int" parameterType="string">
         SELECT COUNT(*)
         FROM Post P
                  INNER JOIN USERINFO U ON P.USER_ID = U.ID

@@ -29,6 +29,8 @@ public class CustomExceptionHandler {
         return "redirect:/post";
     }
 
+    //@ControllerAdvice 모든 컨트롤러에서 예외처리 어노테이션
+
     // 존재하지 않는 상세글 페이지 처리
     @ExceptionHandler(MyBatisSystemException.class)
     public String handleMyBatisSystemException(MyBatisSystemException ex, RedirectAttributes redirectAttributes) {

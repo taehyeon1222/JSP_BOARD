@@ -57,10 +57,16 @@ public class PostService {
         return post;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     * post를 맵핑해고 조회수를 추가해줍니다.
+     */
     public Post viewPost(Long id){
         log.info("viewPost({})가 실행되었습니다",id);
         Post post = postMapper.getPostById(id);
-        increaseViewCount(id);
+        increaseViewCount(id); //조회수반환
         return post;
     }
 
@@ -188,16 +194,32 @@ public class PostService {
         return postMapper.searchPostList(paramMap);
     }
 
-    public List<Post> searchPostIdList(String username, Pagination pagination) {
+    /**
+     *
+     * @param username 키워드 및 유저이름
+     * @param pagination 페이징 설정값.
+     * <br>
+     *  pagination.pageInfo(page, range, listCount); <br>
+     *  pagination.setTotalCount(listCount);
+     *
+     * @return 유저이름 게시글 객체값 반환
+     */
+    public List<Post> searchPostUsernameList(String username, Pagination pagination) {
         log.info("searchPostIdList()가 실행됨\n입력된검색어:{}",username);
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("username", username);
         paramMap.put("startList", pagination.getStartList());
         paramMap.put("listSize", pagination.getListSize());
-        return postMapper.searchPostIdList(paramMap);
+        return postMapper.searchPostUsernameList(paramMap);
     }
 
 
+    /**
+     *
+     * @param s
+     * @return
+     *
+     */
 
     public int getPostCountByTitle(String s) {
         int result = postMapper.getPostCountByTitle(s);
@@ -206,9 +228,15 @@ public class PostService {
     }
 
 
-    public int getPostCountByUserId(String userId) {
-        int result = postMapper.getPostCountByUserId(userId);
-        log.info("getPostCountByUserId({})가 실행되었습니다.\n 검색된 게시글 수의 반환값:{}",userId,result);
+    /**
+     *
+     * @param userName
+     * @return
+     * userName로 값을 받아서 전체 게시글 수를 반환해줍니다.
+     */
+    public int getPostCountByUserId(String userName) {
+        int result = postMapper.getPostCountByUserName(userName);
+        log.info("getPostCountByUserId({})가 실행되었습니다.\n 검색된 게시글 수의 반환값:{}",userName,result);
         return result;
     }
 
@@ -216,6 +244,7 @@ public class PostService {
     조회수
      */
     public void increaseViewCount(Long id) {
+        log.info("increaseViewCount({})가 실행되었습니다.",id);
         postMapper.increaseViewCount(id);
     }
 

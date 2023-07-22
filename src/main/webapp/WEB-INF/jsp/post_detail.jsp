@@ -54,7 +54,7 @@
         <p>Likes: ${commentLikeCount[comment.id]}</p>
         <a href="/post/${comment.postId}/comment/${comment.id}/like">추천</a>
 
-        <c:if test="${canEdit}">
+        <c:if test="${commentEditPermissions[comment.id]}"><!--작성자와같은지체크-->
             <sec:authorize access="isAuthenticated() and (hasRole('ROLE_ADMIN') or hasRole('ROLE_USER'))">
                 <a href="/post/${post.id}/delete/${comment.id}">댓글 삭제</a>
                 <a href="/post/${post.id}/c/modify/${comment.id}#commentForm">댓글 수정</a>
@@ -62,10 +62,7 @@
         </c:if>
 
     </c:forEach>
-
-
-
-</div><!-------------------------------------------댓글출력의 끝----------------------------------------------------------->
+</div>
 
 
 

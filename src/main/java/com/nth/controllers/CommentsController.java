@@ -28,10 +28,9 @@ import java.util.List;
 public class CommentsController {
 
     private final CommentsService commentsService;
-
     private final UserInfoService userInfoService;
-
     private final PostService postService;
+
 
     private static final Logger log = LoggerFactory.getLogger(CommentsController.class);
 

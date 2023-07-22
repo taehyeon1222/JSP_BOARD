@@ -16,4 +16,5 @@ public class Post {
     private UserInfo userInfo;
     private Long likeCount; //추천수
     private Long views;
+    private String category;
 }

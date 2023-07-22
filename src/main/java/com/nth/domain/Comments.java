@@ -13,6 +13,8 @@ public class Comments {
     private Long userId;
     private String createdDate;
     private UserInfo userInfo;
+    private String title;
+    private int likeCount;
 
 
     /* 오라클 작성 테이블 쿼리

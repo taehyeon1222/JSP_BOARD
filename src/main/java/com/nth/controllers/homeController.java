@@ -84,10 +84,10 @@ public class homeController {
                 listCount = postService.getPostCountByUserId(keyword);
                 pagination.pageInfo(page, range, listCount); //페이징 설정
                 pagination.setTotalCount(listCount);
-                postList = postService.searchPostIdList(keyword,pagination);
+                postList = postService.searchPostUsernameList(keyword,pagination);
                 break;
             default:
-                throw new IllegalArgumentException("Invalid searchType: " + searchType);
+                throw new IllegalArgumentException("검색유형 오류: " + searchType);
         }
 
         model.addAttribute("keyword", keyword);
@@ -103,27 +103,37 @@ public class homeController {
     @GetMapping("/post/{id}")
     public String getPostById(@PathVariable long id, Model model ,Principal principal) {
         Post post = postService.viewPost(id);
-        model.addAttribute("formActionUrl", "/comments");
+        model.addAttribute("formActionUrl", "/comments"); //변동usl 편법으로 넣음
         List<Comments> comments = commentsService.getCommentsByPostId(id);
-        Map<Long, Long> commentLikes = new HashMap<>();
+        Map<Long, Long> commentLikes = new HashMap<>(); //댓글 좋아요 수 저장
+        Map<Long, Boolean> commentEditPermissions = new HashMap<>(); //수정/삭제 편집권한을 저장할 맵
+
+        boolean canEditPost = adminCheck(principal,post); //관리자권한 및 게시글작성자와 접속유저 체크
+
         for (Comments comment : comments) {
             Long commentId = comment.getId();
-            Long commentLikeCount = commentsLikeService.countLike(commentId);
+            Long commentLikeCount = commentsLikeService.countLike(commentId); //댓글 좋아요수 저장
             commentLikes.put(commentId, commentLikeCount);
+
+            boolean canEditComment = adminCheck2(principal, comment); // 댓글 수정/삭제권한
+            commentEditPermissions.put(commentId, canEditComment);
         }
+
         Long Likecount = likeService.countLike(post.getId());
 
-
-        boolean canEdit = adminCheck(principal,post); //관리자권한 및 게시글작성자와 접속유저 체크
-        model.addAttribute("canEdit", canEdit);//관리자권한 혹은 게시글 권한이 있을경우 수정/삭제 버튼 활성화
-
-        model.addAttribute("commentLikeCount", commentLikes);
-        model.addAttribute("like", Likecount);
+        model.addAttribute("canEdit", canEditPost); //관리자권한 혹은 게시글 권한이 있을경우 수정/삭제 버튼 활성화
+        model.addAttribute("commentEditPermissions", commentEditPermissions); //관리자권한 혹은 댓글 권한이 있을경우 수정/삭제 버튼 활성화
+        model.addAttribute("commentLikeCount", commentLikes); //댓글좋아요수
+        model.addAttribute("like", Likecount); //게시글좋아요수
         model.addAttribute("post", post);
         model.addAttribute("comments", comments);
 
         return "post_detail";
     }
+
+
+
+
 
 
     @PreAuthorize("isAuthenticated()")
@@ -226,16 +236,25 @@ public class homeController {
      *
      * @param principal
      * @param post
-     * @return 어드민권한을 가지고 있을경우 버튼 활성화.
+     * @param comment
+     * @return 어드민권한을 가지고 있을경우 작성자가 같을경우 프론트에서 수정/삭제버튼 활성화
      */
-    public boolean adminCheck(Principal principal,Post post){
-            boolean canEdit = SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
-                    (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) ||
-                            (principal != null && post.getUserInfo().getUsername().equals(principal.getName())));
+    public boolean adminCheck(Principal principal, Post post){
+        boolean canEditPost = SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
+                (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) ||
+                        (principal != null && post.getUserInfo().getUsername().equals(principal.getName())));
+        log.info("adminCheck()메소드실행됨\n,게시글유저이름:{},댓글유저이름:{},유저권한{}", post.getUserInfo().getUsername(),SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")));
 
-        log.info("adminCheck()메소드실행됨\n,게시글유저이름:{},유저권한{}",post.getUserInfo().getUsername(),SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")));
-            return canEdit;
-        }
+        return canEditPost;
+    }
+
+    public boolean adminCheck2(Principal principal,Comments comment){
+        boolean canEditComment = SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
+                (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) ||
+                        (principal != null && comment.getUserInfo().getUsername().equals(principal.getName())));
+        return canEditComment;
+    }
+
 
 
     /**

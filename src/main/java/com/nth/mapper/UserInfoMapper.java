@@ -17,6 +17,12 @@ public interface UserInfoMapper {
      */
     Optional<UserInfo> findByUsername(String username);
 
+    void updatePassword(String newPassword,Long id);
 
     void insertUserInfo(UserInfo userInfo);
+
+    void deleteUserinfo(Long id);
+
+
+
 }

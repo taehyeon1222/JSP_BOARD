@@ -9,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CommentsService {
@@ -61,7 +63,8 @@ public class CommentsService {
      *
      * @param id
      * @return
-     * 댓글 id값으로 댓글 불러오기
+     * 댓글 id값으로 한개의 댓글 불러오기
+     *
      */
     public Comments getCommentById(Long id) {
         if (id == null) {
@@ -97,6 +100,22 @@ public class CommentsService {
     public void deleteComment(long id){
         log.info("deleteComment()가실행됨\n불러온id값:{}",id);
         commentsMapper.deleteComment(id);
+    }
+
+
+    public List<Comments> getCommentsByUserId(String username, Pagination pagination){
+        log.info("getCommentsByUserId()가 실행됨\n입력된검색어:{}",username);
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("username", username);
+        paramMap.put("startList", pagination.getStartList());
+        paramMap.put("listSize", pagination.getListSize());
+        return commentsMapper.getCommentsByUserId(paramMap);
+    }
+
+    public int getCommentsCountByUserName(String userName){
+        int result = commentsMapper.getCommentsCountByUserName(userName);
+        log.info("getCommentsCountByUserName({})이 실행되었습니다.",result);
+        return  result;
     }
 
 
