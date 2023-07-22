@@ -33,6 +33,13 @@ public interface PostMapper {
     void increaseViewCount(Long id); //조회수
 
 
+    /**
+     *
+     * @param params
+     * @return
+     * 카테고리로 int 반환
+     */
+    int getPostCountByTitleAndCategory(Map<String, String> params);
 }
 
 

@@ -4,6 +4,7 @@ import com.nth.domain.Comments;
 import com.nth.domain.Like;
 import com.nth.domain.Post;
 import com.nth.domain.UserInfo;
+import com.nth.dto.PostForm;
 import com.nth.mapper.CommentsMapper;
 import com.nth.mapper.LikeMapper;
 import com.nth.mapper.PostMapper;
@@ -45,37 +46,43 @@ class NthprojectApplicationTests {
     @Autowired
     private PostMapper postMapper;
 
-    //게시글 생성
-//    @Test
-//    public void testCreatePost() {
+
+    @Test
+    public void testCreatePost() {
+
+
+        // 테스트 데이터 준비
+
+        UserInfo userInfo = new UserInfo();
+
+        Long Id = 13L;
+
+        UserInfo user = userInfoService.getUserInfoById(Id);
+
+
+        for(int i=0;i<5;i++){
+            PostForm postForm = new PostForm();
+            postForm.setCategory("자유");
+            postForm.setTitle("자유는50개임"+i);
+            postForm.setContent("질문테스트"+i);
+            postService.createIdPost(postForm,user);
+        }
+
+
+        // 테스트 결과 검증
+//        Post post = postMapper.getAllPosts().get(0);
+//        assertThat(post.getTitle()).isEqualTo(title);
+//        assertThat(post.getContent()).isEqualTo(content);
+    }
 //
 //
-//        // 테스트 데이터 준비
-//
-//        for(int i=0;i<10;i++){
-//            String title = "제목"+i;
-//            String content = "내용"+i;
-//            postService.createPost(title, content);
-//        }
-//
-//        String title = "제목";
-//        String content = "내용";
-//        postService.createPost(title, content);
-//
-//        // 테스트 결과 검증
-////        Post post = postMapper.getAllPosts().get(0);
-////        assertThat(post.getTitle()).isEqualTo(title);
-////        assertThat(post.getContent()).isEqualTo(content);
-//    }
-//
-//
-//    //게시글 전체 삭제
-//    @Test
-//    public void testDeletPost() {
-//        for(long i=0;i<1000;i++)
-//        postMapper.deletePost(i);
-//    }
-//
+    //게시글 전체 삭제
+    @Test
+    public void testDeletPost() {
+        for(long i=0;i<1000;i++)
+        postMapper.deletePost(i);
+    }
+
 //
 //    //댓글 작성
 //    @Test

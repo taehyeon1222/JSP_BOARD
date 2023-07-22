@@ -5,7 +5,7 @@
   <title>자유게시판</title>
 </head>
 <body>
-<h1>자유게시판</h1>
+<h1>${category}게시판</h1>
 
 <!-------------------------------------------에러메세지출력----------------------------------------------------------->
 <c:if test="${not empty errorMessage}">
@@ -57,7 +57,7 @@
 <!-- 하단페이징 처리-->
 <div>
   <c:if test="${pagination.page > 1}">
-    <a href="?searchType=${searchType}&keyword=${keyword}&page=${pagination.page-1}">이전</a>
+    <a href="?category=${category}&searchType=${searchType}&keyword=${keyword}&page=${pagination.page-1}">이전</a>
   </c:if>
 
   <c:set var="startPage" value="${pagination.page - 2 <= 0 ? 1 : pagination.page - 2}" />
@@ -67,19 +67,18 @@
   <c:forEach var="i" begin="${startPage}" end="${endPage}">
     <c:choose>
       <c:when test="${i == pagination.page}">
-        <a href="?searchType=${searchType}&keyword=${keyword}&page=${i}">${i}</a>
+        <a href="?category=${category}&searchType=${searchType}&keyword=${keyword}&page=${i}">${i}</a>
       </c:when>
       <c:otherwise>
-        <a href="?searchType=${searchType}&keyword=${keyword}&page=${i}">${i}</a>
+        <a href="?category=${category}&searchType=${searchType}&keyword=${keyword}&page=${i}">${i}</a>
       </c:otherwise>
     </c:choose>
   </c:forEach>
 
   <c:if test="${pagination.page < pagination.pageCnt}">
-    <a href="?searchType=${searchType}&keyword=${keyword}&page=${pagination.page+1}">다음</a>
+    <a href="?category=${category}&searchType=${searchType}&keyword=${keyword}&page=${pagination.page+1}">다음</a>
   </c:if>
 </div>
-
 
 
 

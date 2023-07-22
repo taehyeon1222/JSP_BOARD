@@ -209,7 +209,7 @@ public class UserInfoController {
             return "redirect:/login";
         }
         if (bindingResult.hasErrors()) {
-            log.error("userModify()에서 오류 발생: {}", bindingResult.getAllErrors());
+            log.error("userModify()에서 검증 오류 발생: {}", bindingResult.getAllErrors());
             return "userModifyForm";
         }
         try {

@@ -1,6 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ include file="/WEB-INF/jsp/layout/header.jsp" %>
+
 
 <html>
 <head>
@@ -18,11 +20,18 @@
 </c:if>
 
 <form action="${formActionUrl}" method="post">
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title" value="${postForm.title}"><br><br>
-    <label for="content">Content:</label><br>
-    <textarea id="content" name="content" rows="4" cols="50">${postForm.content}</textarea><br><br>
-    <input type="submit" value="작성하기">
+    <input type="text" name="title" placeholder="제목" required value="${postForm.title}">
+    <textarea name="content" placeholder="내용" required>${postForm.content}</textarea>
+    <select name="category">
+        <sec:authorize access="hasRole('ROLE_ADMIN')">
+            <option value="공지" ${postForm.category == '공지사항' ? 'selected' : ''}>공지사항</option>
+        </sec:authorize>
+        <option value="자유" ${postForm.category == '자유' ? 'selected' : ''}>자유</option>
+        <option value="질문" ${postForm.category == '질문게시판' ? 'selected' : ''}>질문게시판</option>
+        <option value="건의" ${postForm.category == '건의사항' ? 'selected' : ''}>건의사항</option>
+    </select>
+    <button type="submit">게시하기</button>
 </form>
+
 </body>
 </html>

@@ -63,7 +63,8 @@ public class homeController {
                               @RequestParam(defaultValue = "") String keyword,
                               @RequestParam(defaultValue = "1") int page,
                               @RequestParam(defaultValue = "1") int range,
-                              @RequestParam(defaultValue = "title") String searchType) {
+                              @RequestParam(defaultValue = "title") String searchType,
+                              @RequestParam(defaultValue = "공지") String category) {
         log.info("GetMapping(\"/post\")가 호출됨");
 
         Pagination pagination = new Pagination();
@@ -74,14 +75,14 @@ public class homeController {
         switch(searchType) {
             case "title":
                 log.info("제목과 내용으로 검색");
-                listCount = postService.getPostCountByTitle(keyword);
+                listCount = postService.getPostCountByTitleAndCategory(keyword,category);
                 pagination.pageInfo(page, range, listCount); //페이징 설정
                 pagination.setTotalCount(listCount);
-                postList = postService.searchPostList(keyword, pagination);
+                postList = postService.searchPostList(keyword,pagination,category);
                 break;
             case "userId":
                 log.info("아이디로검색이 선택됨");
-                listCount = postService.getPostCountByUserId(keyword);
+                listCount = postService.getPostCountByTitleAndCategory(keyword,category);
                 pagination.pageInfo(page, range, listCount); //페이징 설정
                 pagination.setTotalCount(listCount);
                 postList = postService.searchPostUsernameList(keyword,pagination);
@@ -94,6 +95,7 @@ public class homeController {
         model.addAttribute("searchType", searchType);
         model.addAttribute("pagination", pagination);
         model.addAttribute("postList", postList);
+        model.addAttribute("category", category);
 
         return "postList";
     }
@@ -134,40 +136,25 @@ public class homeController {
 
 
 
-
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/create")
+    public String showPostForm(Model model) {
+        model.addAttribute("formActionUrl", "/create");
+        return "postcreate";}
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public String createPost(@Valid PostForm postForm,BindingResult result,Principal principal
-    ,Model model, RedirectAttributes redirectAttributes) {
-        String errorResult = validateCheck(result,postForm,redirectAttributes);
+    public String createPost(@Valid PostForm postForm, BindingResult result, Principal principal, Model model, RedirectAttributes redirectAttributes) {
+        String errorResult = validateCheck(result, postForm, redirectAttributes);
         // 유효성 검사 메서드
         if (errorResult != null) {
             return errorResult;
         }
-           UserInfo userInfo = userInfoService.findByUsername(principal.getName());
-           Post post = postService.createIdPost(postForm, userInfo);
-           Long postid = post.getId();
-           return "redirect:/post/"+postid;
-        }
-
-        @PreAuthorize("isAuthenticated()")
-        @GetMapping("/create")
-        public String showPostForm(Model model) {
-            model.addAttribute("formActionUrl", "/create");
-        return "postcreate";}
-        //삭제
-         @GetMapping("/post/delete/{id}")
-        public String deletePost(@PathVariable long id, Principal principal, RedirectAttributes redirectAttributes){
-        log.info("/post/delete/{}요청이 들어왔습니다.",id);
-        Post post = postService.getPostById(id);
-        String redirectPage = checkAuthorAccess(post, principal, redirectAttributes,"삭제");
-            if (redirectPage != null) {
-            return redirectPage;
-             }
-             postService.deletePost(id);
-        return "redirect:/post";
-        }
+        UserInfo userInfo = userInfoService.findByUsername(principal.getName());
+        Post post = postService.createIdPost(postForm, userInfo);
+        Long postid = post.getId();
+        return "redirect:/post/"+postid;
+    }
 
 
     //수정
@@ -181,28 +168,53 @@ public class homeController {
             log.info("redirectPage가 실행됨");
             return redirectPage;
         }
-        // Admin or author, continue editing the post.
         PostForm postForm = new PostForm();
         postForm.setTitle(post.getTitle());
         postForm.setContent(post.getContent());
+        postForm.setCategory(post.getCategory());
         model.addAttribute("formActionUrl", "/post/modify/" + id);
         model.addAttribute("postForm", postForm);
         return "postcreate";
     }
 
-
     @PostMapping("/post/modify/{id}")
-    public String modifyPost(@PathVariable long id, @Valid PostForm postForm, BindingResult result) {
+    public String modifyPost(@PathVariable long id, @Valid PostForm postForm, BindingResult result, Model model
+    ,RedirectAttributes redirectAttributes) {
         log.info("/post/modifySubmit/{} 요청이 들어왔습니다. (POST)", id);
-        if (result.hasErrors()) {
-            return "postcreate";
+
+        String errorResult = validateCheck(result, postForm, redirectAttributes);
+        // 유효성 검사 메서드
+        if (errorResult != null) {
+            return errorResult;
         }
+
         Post post = postService.getPostById(id);
-        post.setTitle(postForm.getTitle());
-        post.setContent(postForm.getContent());
-        postService.updatePost(id, post);
+        postService.updatePost(id,postForm);
         return "redirect:/post/" + id;
     }
+
+
+
+    //삭제
+         @GetMapping("/post/delete/{id}")
+        public String deletePost(@PathVariable long id, Principal principal, RedirectAttributes redirectAttributes){
+        log.info("/post/delete/{}요청이 들어왔습니다.",id);
+        Post post = postService.getPostById(id);
+        //게시물 수정및 삭제 버튼 강제 접근 처리
+        String redirectPage = checkAuthorAccess(post, principal, redirectAttributes,"삭제");
+
+            if (redirectPage != null) {
+            return redirectPage;
+             }
+
+             postService.deletePost(id);
+        return "redirect:/post";
+        }
+
+
+
+
+
 
 
     /**

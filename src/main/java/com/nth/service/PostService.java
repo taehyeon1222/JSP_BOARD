@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,8 +95,11 @@ public class PostService {
      */
     public Post createIdPost(PostForm postForm, UserInfo userInfo) {
         Post post = new Post();
+        checkAdminCategory(postForm); //유저가 선택한 폼에서 카테고리 확인 및 관리자 권한체크
+
         post.setTitle(postForm.getTitle());
         post.setContent(postForm.getContent());
+        post.setCategory(postForm.getCategory()); // 카테고리 추가
         post.setUserInfo(userInfo);
         postMapper.insertUserPost(post);
         log.info("PostService\n" +
@@ -102,28 +108,32 @@ public class PostService {
                         "\npostid:{}" +
                         "\n제목:[{}]" +
                         "\n내용:[{}]"+
+                        "\n카테고리:[{}]"+
                         "\n유저아이디:[{}]"
                 ,post.getId()
-                ,postForm.getTitle(),postForm.getContent()
+                ,postForm.getTitle(),postForm.getContent(),postForm.getCategory()
                 ,userInfo.getUsername() // 게시글 작성로그
         );
         return post;
-
     }
 
 
+
     //게시물 수정서비스
-    public void updatePost(long id, Post post) {
+    public void updatePost(long id, PostForm postForm) {
         log.info("updatePost()가 실행되었습니다.\n 요청된 게시물 id: {}", id);
-        Post Post = postMapper.getPostById(id);
-        log.info("post == null에러 발생\n존재하지않는게시물");
-        if (Post == null) {
+
+        checkAdminCategory(postForm); //유저가 선택한 폼에서 카테고리 확인 및 관리자 권한체크
+
+        Post updatePost = postMapper.getPostById(id);
+        if (updatePost == null) {
             log.info("post == null에러 발생\n존재하지않는게시물");
             throw new RuntimeException("id가 널 입니다. id " + id);
         }
-        Post.setTitle(post.getTitle());
-        Post.setContent(post.getContent());
-        postMapper.updatePost(Post);
+        updatePost.setTitle(postForm.getTitle());
+        updatePost.setContent(postForm.getContent());
+        updatePost.setCategory(postForm.getCategory()); // 카테고리 추가
+        postMapper.updatePost(updatePost);
         log.info("게시물이 수정 되었습니다.");
     }
 
@@ -185,14 +195,17 @@ public class PostService {
         return postList;
     }
 
-    public List<Post> searchPostList(String kw, Pagination pagination) {
+
+    public List<Post> searchPostList(String kw,Pagination pagination,String category) {
         log.info("searchPostList()가 실행됨\n입력된검색어:{}",kw);
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("title", kw);
+        paramMap.put("category", category); // category 파라미터 추가
         paramMap.put("startList", pagination.getStartList());
         paramMap.put("listSize", pagination.getListSize());
         return postMapper.searchPostList(paramMap);
     }
+
 
     /**
      *
@@ -202,7 +215,7 @@ public class PostService {
      *  pagination.pageInfo(page, range, listCount); <br>
      *  pagination.setTotalCount(listCount);
      *
-     * @return 유저이름 게시글 객체값 반환
+     * @return 유저이름 게시글 객체값 반환 searchPostUsernameList
      */
     public List<Post> searchPostUsernameList(String username, Pagination pagination) {
         log.info("searchPostIdList()가 실행됨\n입력된검색어:{}",username);
@@ -216,16 +229,32 @@ public class PostService {
 
     /**
      *
-     * @param s
+     * @param keyword
      * @return
-     *
+     * 총 게시글 수를 키워드로 반환 ( 카테고리를 무시함)
      */
-
-    public int getPostCountByTitle(String s) {
-        int result = postMapper.getPostCountByTitle(s);
-        log.info("getPostCountByTitle({})가 실행되었습니다.\n 검색된 게시글 수의 반환값:{}",s,result);
+    public int getPostCountByTitle(String keyword) {
+        int result = postMapper.getPostCountByTitle(keyword);
+        log.info("getPostCountByTitle({})가 실행되었습니다.\n 검색된 게시글 수의 반환값:{}",keyword,result);
         return result;
     }
+
+    /**
+     *
+     * @param keyword
+     * @param category
+     * @return 총 게시글수를 카테고리를 포함해서 반환
+     */
+    public int getPostCountByTitleAndCategory(String keyword, String category) {
+        Map<String, String> params = new HashMap<>();
+        params.put("title", keyword);
+        params.put("category", category);
+
+        int result = postMapper.getPostCountByTitleAndCategory(params);
+        log.info("getPostCountByTitleAndCategory({},{})가 실행되었습니다.\n 검색된 게시글 수의 반환값:{}",keyword, category, result);
+        return result;
+    }
+
 
 
     /**
@@ -268,6 +297,21 @@ public class PostService {
 
 
 
+    private void checkAdminCategory(PostForm postForm){
+        if("공지사항".equals(postForm.getCategory()) &&
+                (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated() ||
+                        !SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))){
+            postForm.setCategory("자유");
+        }
+    }
+
+    private void checkAdminAndResetCategory(PostForm postForm) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if ("공지사항".equals(postForm.getCategory()) &&
+                (!auth.isAuthenticated() || !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))) {
+            postForm.setCategory("자유");
+        }
+    }
 
 
 

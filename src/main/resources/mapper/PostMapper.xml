@@ -33,7 +33,7 @@
         INSERT INTO POST (ID, TITLE, CONTENT, CREATED_DATE)
         VALUES (SEQ_POST_ID.NEXTVAL, #{title}, #{content}, SYSDATE)
 -->
-
+<!--
     <insert id="insertUserPost" parameterType="com.nth.domain.Post" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         <selectKey resultType="Long" keyProperty="id" order="BEFORE">
             SELECT SEQ_POST_ID.NEXTVAL FROM DUAL
@@ -41,10 +41,20 @@
         INSERT INTO POST (ID, TITLE, CONTENT, CREATED_DATE, USER_ID)
         VALUES (#{id}, #{title}, #{content}, SYSDATE, #{userInfo.id})
     </insert>
+-->
+    <insert id="insertUserPost" parameterType="com.nth.domain.Post" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        <selectKey resultType="Long" keyProperty="id" order="BEFORE">
+            SELECT SEQ_POST_ID.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO POST (ID, TITLE, CONTENT, CREATED_DATE, USER_ID, CATEGORY)
+        VALUES (#{id}, #{title}, #{content}, SYSDATE, #{userInfo.id}, #{category})
+    </insert>
+
 
     <update id="updatePost" parameterType="com.nth.domain.Post">
-        UPDATE POST SET TITLE = #{title}, CONTENT = #{content} WHERE ID = #{id}
+        UPDATE POST SET TITLE = #{title}, CONTENT = #{content}, CATEGORY = #{category} WHERE ID = #{id}
     </update>
+
 
 
     <delete id="deletePost" parameterType="long">
@@ -69,7 +79,8 @@
         FROM (
                  SELECT ROW_NUMBER() OVER (ORDER BY created_date DESC) row_num, Post.*
                  FROM Post
-                 WHERE title LIKE '%'||#{title}||'%' OR content LIKE '%'||#{title}||'%'
+                 WHERE (title LIKE '%'||#{title}||'%' OR content LIKE '%'||#{title}||'%')
+                   AND category = #{category}
              ) P
                  JOIN "USERINFO" U ON P.user_id = U.id
                  LEFT JOIN (
@@ -77,6 +88,7 @@
         ) L ON P.ID = L.post_id
         WHERE row_num BETWEEN #{startList}+1 AND #{startList}+#{listSize}
     </select>
+
 
 
     <select id="searchPostUsernameList" resultType="com.nth.domain.Post" parameterType="map">
@@ -113,15 +125,24 @@
 
 
     <!--페이징 카운트 쿼리-->
-    <select id="getPostCount" resultType="int">
+    <select id="getPostCountByCategory" resultType="int" parameterType="string">
         SELECT COUNT(*) FROM Post
+        WHERE category = '공지사항'
     </select>
+
 
     <!--페이징 카운트 검색 쿼리-->
     <select id="getPostCountByTitle" resultType="int" parameterType="string">
         SELECT COUNT(*) FROM Post WHERE title LIKE '%'||#{title}||'%' OR content LIKE '%'||#{title}||'%'
     </select>
-    <!--SELECT COUNT(*) FROM Post WHERE title LIKE '%'||#{title}||'%' -->
+
+    <!--페이징 카운트 검색 쿼리 에 카테고리를 추가함-->
+    <select id="getPostCountByTitleAndCategory" resultType="int" parameterType="map">
+        SELECT COUNT(*) FROM Post
+        WHERE (title LIKE '%'||#{title}||'%' OR content LIKE '%'||#{title}||'%')
+          AND category = #{category}
+    </select>
+
 
     <!--유저 아이디 카운트 검색 쿼리-->
     <select id="getPostCountByUserName" resultType="int" parameterType="string">
@@ -130,6 +151,7 @@
                  INNER JOIN USERINFO U ON P.USER_ID = U.ID
         WHERE U.USERNAME LIKE '%' || #{userName} || '%'
     </select>
+
 
 
     <!--조회수-->
