@@ -14,14 +14,14 @@
 <!-------------------------------------------에러메세지출력----------------------------------------------------------->
 
 <form action="/post" method="GET">
+  <input type="hidden" name="category" value="${category}">
   <select name="searchType">
     <option value="title">제목+내용</option>
     <option value="userId">사용자 ID</option>
   </select>
-  <input type="text" name="keyword" placeholder="검색어를입력해주세요" value="${keyword}">
+  <input type="text" name="keyword" placeholder="검색어를 입력해주세요" value="${keyword}">
   <input type="submit" value="검색">
 </form>
-
 
 
 <table>

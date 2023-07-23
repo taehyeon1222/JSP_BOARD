@@ -71,7 +71,7 @@
         WHERE row_num BETWEEN #{startList}+1 AND #{startList}+#{listSize}
     </select>
 -->
-    <!--제목과 내용으로 검색 후 페이징-->
+    <!--제목과 내용으로 검색 후 페이징 카테고리 추가-->
     <select id="searchPostList" resultType="com.nth.domain.Post" parameterType="map">
         SELECT P.id, P.title, P.content, P.views AS views, P.created_date as createdDate,
                U.ID AS "userInfo.id", U.USERNAME AS "userInfo.username",
@@ -108,8 +108,26 @@
         ORDER BY P.row_num
     </select>
 
+<!-- 페이징 유저 카테고리 추가
+    <select id="searchPostUsernameCategoryList" resultType="com.nth.domain.Post" parameterType="map">
+        SELECT P.id, P.title, P.views, P.created_date AS createdDate,
+               P.userId AS "userInfo.id", P.username AS "userInfo.username",
+               COALESCE(L.CNT, 0) AS "likeCount"
+        FROM (
+                 SELECT ROW_NUMBER() OVER (ORDER BY created_date DESC) row_num, P.*, U.username, U.id AS userId
+                 FROM post P
+                          JOIN userinfo U ON P.user_id = U.id
+                 WHERE U.username LIKE '%'||#{username}||'%'
+                   AND P.category = #{category}
+             ) P
+                 LEFT JOIN (
+            SELECT post_id, COUNT(*) as CNT FROM likes GROUP BY post_id
+        ) L ON P.ID = L.post_id
+        WHERE row_num BETWEEN #{startList}+1 AND #{startList}+#{listSize}
+        ORDER BY P.row_num
+    </select>
 
-
+-->
 
     <!--페이징 이제 사용하지 않음 검색기능이 없음-->
     <select id="getPostList" resultType="com.nth.domain.Post" parameterType="com.nth.service.Pagination">

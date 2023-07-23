@@ -71,21 +71,22 @@ public class homeController {
         List<Post> postList;
         int listCount;
 
-
-        switch(searchType) {
+        switch (searchType) {
             case "title":
+                model.addAttribute("category", category);
                 log.info("제목과 내용으로 검색");
-                listCount = postService.getPostCountByTitleAndCategory(keyword,category);
+                listCount = postService.getPostCountByTitleAndCategory(keyword, category);
                 pagination.pageInfo(page, range, listCount); //페이징 설정
                 pagination.setTotalCount(listCount);
-                postList = postService.searchPostList(keyword,pagination,category);
+
+                postList = postService.searchPostList(keyword, pagination, category);
                 break;
             case "userId":
                 log.info("아이디로검색이 선택됨");
-                listCount = postService.getPostCountByTitleAndCategory(keyword,category);
+                listCount = postService.getPostCountByTitleAndCategory(keyword, category);
                 pagination.pageInfo(page, range, listCount); //페이징 설정
                 pagination.setTotalCount(listCount);
-                postList = postService.searchPostUsernameList(keyword,pagination);
+                postList = postService.searchPostUsernameList(keyword, pagination);
                 break;
             default:
                 throw new IllegalArgumentException("검색유형 오류: " + searchType);
@@ -95,10 +96,10 @@ public class homeController {
         model.addAttribute("searchType", searchType);
         model.addAttribute("pagination", pagination);
         model.addAttribute("postList", postList);
-        model.addAttribute("category", category);
 
         return "postList";
     }
+
 
 
     //게시글 상세보기

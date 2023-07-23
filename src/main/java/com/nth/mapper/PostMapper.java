@@ -30,6 +30,7 @@ public interface PostMapper {
 
     List<Post> searchPostUsernameList(Map<String, Object> params); //아이디 검색
 
+   // List<Post> searchPostUsernameCategoryList(Map<String, Object> params);
     void increaseViewCount(Long id); //조회수
 
 

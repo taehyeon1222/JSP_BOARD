@@ -13,7 +13,7 @@ public interface CommentsMapper {
     void deleteComment(Long id);
 
 
-      Comments getCommentById(Long id);
+    Comments getCommentById(Long id);
 
     List<Comments> getCommentsByPostId(Long postId);
 

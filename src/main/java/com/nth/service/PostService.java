@@ -207,6 +207,8 @@ public class PostService {
     }
 
 
+
+
     /**
      *
      * @param username 키워드 및 유저이름
@@ -226,6 +228,17 @@ public class PostService {
         return postMapper.searchPostUsernameList(paramMap);
     }
 
+/* 페이징 유저 카테고리 추가
+    public List<Post> searchPostUsernameCategoryList(String username, Pagination pagination,String category) {
+        log.info("searchPostIdList()가 실행됨\n입력된검색어:{}",username);
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("username", username);
+        paramMap.put("category", category); // category 파라미터 추가
+        paramMap.put("startList", pagination.getStartList());
+        paramMap.put("listSize", pagination.getListSize());
+        return postMapper.searchPostUsernameCategoryList(paramMap);
+    }
+*/
 
     /**
      *

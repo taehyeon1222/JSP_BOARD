@@ -124,8 +124,11 @@ public class UserInfoController {
         pagination.pageInfo(page, range, listCount);
         //  pagination.pageconfig(5,5);
          // pagination.setTotalCount(listCount);
+
         List<Comments> commentsList = commentsService.getCommentsByUserId(username, pagination);
-        List<Post> postList = postService.searchPostUsernameList(username, pagination);
+        List<Post> postList = postService.searchPostUsernameList(username, pagination); //유저이름으로 검색
+
+
         model.addAttribute("commentsList",commentsList);
         model.addAttribute("postList",postList); // 게시글 객체를 뷰에 전달
         model.addAttribute("pagination", pagination); //페이징 정보를 객체에 전달
