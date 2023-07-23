@@ -82,11 +82,13 @@ public class homeController {
                 postList = postService.searchPostList(keyword, pagination, category);
                 break;
             case "userId":
+                model.addAttribute("category", category);
                 log.info("아이디로검색이 선택됨");
-                listCount = postService.getPostCountByTitleAndCategory(keyword, category);
+                listCount = postService.getPostCountByUserNameAndCategory(keyword,category);
                 pagination.pageInfo(page, range, listCount); //페이징 설정
                 pagination.setTotalCount(listCount);
-                postList = postService.searchPostUsernameList(keyword, pagination);
+
+                postList = postService.searchPostUsernameCategoryList(keyword,pagination,category);
                 break;
             default:
                 throw new IllegalArgumentException("검색유형 오류: " + searchType);

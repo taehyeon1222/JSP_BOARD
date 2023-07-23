@@ -228,7 +228,16 @@ public class PostService {
         return postMapper.searchPostUsernameList(paramMap);
     }
 
-/* 페이징 유저 카테고리 추가
+/* 페이징 유저 카테고리 추가 */
+
+    /**
+     *
+     * @param username 유저이름
+     * @param pagination 페이징설정값
+     * @param category 카테고리
+     * @return
+     * 유저이름으로 검색 + 카테고리
+     */
     public List<Post> searchPostUsernameCategoryList(String username, Pagination pagination,String category) {
         log.info("searchPostIdList()가 실행됨\n입력된검색어:{}",username);
         Map<String, Object> paramMap = new HashMap<>();
@@ -238,7 +247,7 @@ public class PostService {
         paramMap.put("listSize", pagination.getListSize());
         return postMapper.searchPostUsernameCategoryList(paramMap);
     }
-*/
+
 
     /**
      *
@@ -279,6 +288,23 @@ public class PostService {
     public int getPostCountByUserId(String userName) {
         int result = postMapper.getPostCountByUserName(userName);
         log.info("getPostCountByUserId({})가 실행되었습니다.\n 검색된 게시글 수의 반환값:{}",userName,result);
+        return result;
+    }
+
+    /**
+     *
+     * @param keyword
+     * @param category
+     * @return
+     *  유저이름 + 카테고리로 총 게시글 수를 반환해줍니다.
+     */
+
+    public int getPostCountByUserNameAndCategory(String keyword, String category) {
+        Map<String, String> params = new HashMap<>();
+        params.put("userName", keyword);
+        params.put("category", category);
+        int result = postMapper.getPostCountByUserNameAndCategory(params);
+        log.info("getPostCountByTitleAndCategory({},{})가 실행되었습니다.\n 검색된 게시글 수의 반환값:{}",keyword, category, result);
         return result;
     }
 

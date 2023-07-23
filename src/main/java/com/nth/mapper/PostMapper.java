@@ -30,7 +30,7 @@ public interface PostMapper {
 
     List<Post> searchPostUsernameList(Map<String, Object> params); //아이디 검색
 
-   // List<Post> searchPostUsernameCategoryList(Map<String, Object> params);
+    List<Post> searchPostUsernameCategoryList(Map<String, Object> params);
     void increaseViewCount(Long id); //조회수
 
 
@@ -38,9 +38,16 @@ public interface PostMapper {
      *
      * @param params
      * @return
-     * 카테고리로 int 반환
+     * 카테고리+제목 이름으로 int 반환
      */
     int getPostCountByTitleAndCategory(Map<String, String> params);
+
+    /**
+     * @param params
+     * @return
+     * 카테고리 + 아이디로 int 반환
+     */
+    int getPostCountByUserNameAndCategory(Map<String, String> params);
 }
 
 
