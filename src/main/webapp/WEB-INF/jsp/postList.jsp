@@ -3,6 +3,7 @@
 <html>
 <head>
   <title>자유게시판</title>
+  <c:import url="/WEB-INF/jsp/layout/nav.jsp" />
 </head>
 <body>
 <h1>${category}게시판</h1>

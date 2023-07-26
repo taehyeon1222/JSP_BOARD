@@ -104,7 +104,6 @@ public class UserInfoController {
         return "login";
     }
 
-
     //유저정보
     @GetMapping("/userinfo")
     @PreAuthorize("isAuthenticated()")
@@ -119,7 +118,7 @@ public class UserInfoController {
         String username = principal.getName(); // 사용자 이름 리턴
         UserInfo user = userInfoService.findByUsername(username); //사용자 정보
         int listCount;
-        listCount = postService.getPostCountByUserId(username);
+        listCount = postService.getPostCountByUserName(username);
         Pagination pagination = new Pagination();
         pagination.pageInfo(page, range, listCount);
         //  pagination.pageconfig(5,5);
@@ -150,14 +149,10 @@ public class UserInfoController {
         String username = principal.getName(); // 사용자 이름 리턴
         UserInfo user = userInfoService.findByUsername(username); //사용자 정보
         int listCount;
-        listCount = postService.getPostCountByUserId(username);
+        listCount = postService.getPostCountByUserName(username); //전체 게시글수
         Pagination pagination = new Pagination();
         pagination.pageInfo(page, range, listCount);
-        //  pagination.pageconfig(5,5);
-        // pagination.setTotalCount(listCount);
-        //List<Comments> commentsList = commentsService.getCommentsByUserId(username, pagination);
         List<Post> postList = postService.searchPostUsernameList(username, pagination);
-        //model.addAttribute("commentsList",commentsList);
         model.addAttribute("postList",postList); // 게시글 객체를 뷰에 전달
         model.addAttribute("pagination", pagination); //페이징 정보를 객체에 전달
         model.addAttribute("user", user); // 유저 객체를 뷰에 전달
@@ -180,8 +175,6 @@ public class UserInfoController {
         listCount = commentsService.getCommentsCountByUserName(username);
         Pagination pagination = new Pagination();
         pagination.pageInfo(page, range, listCount);
-        // pagination.pageconfig(5,5);
-
          pagination.setTotalCount(listCount);
         List<Comments> commentsList = commentsService.getCommentsByUserId(username, pagination);
         //List<Post> postList = postService.searchPostUsernameList(username, pagination);
@@ -247,8 +240,8 @@ public class UserInfoController {
         // 로그아웃 처리
         SecurityContextHolder.getContext().setAuthentication(null);  // 보안 컨텍스트 초기화
         request.getSession().invalidate();  // 세션 종료
-
-        return "redirect:/";
+        redirectAttributes.addFlashAttribute("successMessage", "비밀번호가 변경되었습니다. 다시 로그인해주세요");
+        return "redirect:/login";
     }
 
 

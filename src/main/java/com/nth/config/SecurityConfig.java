@@ -23,6 +23,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig  {
 
+    private final CustomAuthenticationFailureHandler failureHandler;
 
     @Bean // 스프링 빈으로 등록하라는 어노테이션. 이 메서드가 반환하는 객체가 스프링 빈으로 등록됩니다.
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception { // HttpSecurity 객체를 매개변수로 받는 filterChain 메서드 정의
@@ -34,6 +35,7 @@ public class SecurityConfig  {
                 .csrf().disable() // CSRF 보호 기능을 비활성화
                 .formLogin() // 폼 기반 로그인에 대한 설정을 시작
                 .loginPage("/login") // 로그인 페이지의 경로를 "/user/login"으로 설정
+                .failureHandler(failureHandler) // 로그인 실패 에러메세지 전달 추가
                 .defaultSuccessUrl("/")// 로그인 성공 후 리다이렉션할 기본 URL을 "/"로 설정
          .and()
          .logout()
@@ -53,6 +55,8 @@ public class SecurityConfig  {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
+
 
 
 

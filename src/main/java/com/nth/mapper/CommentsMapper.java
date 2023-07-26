@@ -17,8 +17,8 @@ public interface CommentsMapper {
 
     List<Comments> getCommentsByPostId(Long postId);
 
-    List<Comments> getCommentsByUserId(Map<String, Object> params);
+    List<Comments> getCommentsByUserId(Map<String, Object> params); //유저 아이디로 댓글검색
 
-    int getCommentsCountByUserName(String userName);
+    int getCommentsCountByUserName(String userName); // 유저 아이디로 검색후 댓글 수 반환
 
 }

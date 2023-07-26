@@ -4,6 +4,7 @@ import com.nth.controllers.CommentsController;
 import com.nth.domain.Comments;
 import com.nth.domain.Post;
 import com.nth.domain.UserInfo;
+import com.nth.dto.CommentForm;
 import com.nth.mapper.CommentsMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,14 +38,17 @@ public class CommentsService {
     }
 
     /**
-     *
-     * @param comment
+     * @param postId 연결할 게시글id값
+     * @param comment 댓글정보
      * @param userInfo 유저정보
      * 댓글작성
      */
-    public void createComment(Comments comment, UserInfo userInfo) {
-        log.info("createComment()실행됨\n입력된값\n내용:[{}]\n유저아이디:[{}]",comment.getContent(),userInfo.getUsername());
+    public void createComment(long postId,CommentForm commentForm, UserInfo userInfo) {
+        Comments comment = new Comments();
+        comment.setPostId(postId); // 현재 postid를 넣어줌
         comment.setUserInfo(userInfo); // 유저의 정보를 저장함
+        comment.setContent(commentForm.getContent());
+        log.info("createComment()실행됨\n입력된값\n내용:[{}]\n유저아이디:[{}]",comment.getContent(),userInfo.getUsername());
         commentsMapper.insertComment(comment);
         log.info("댓글작성이 성공적으로 완료되었습니다.");
     }
@@ -53,18 +57,16 @@ public class CommentsService {
     /**
      *
      * @param Id (postId)
-     * @return 게시물 id 값으로 댓글을 불러옵니다.
+     * @return 게시물 id값으로 댓글을 불러옵니다.
      */
     public List<Comments> getCommentsByPostId(Long Id) {
         log.info("getCommentsByPostId()가 실행됨\n불러온 게시물 id:{}",Id);
         return commentsMapper.getCommentsByPostId(Id);
     }
     /**
-     *
-     * @param id
+     * @param id 댓글id
      * @return
      * 댓글 id값으로 한개의 댓글 불러오기
-     *
      */
     public Comments getCommentById(Long id) {
         if (id == null) {
@@ -78,9 +80,8 @@ public class CommentsService {
 
 
     /**
-     *
-     * @param id
-     * @param comments
+     * @param id 댓글id
+     * @param comments 댓글정보
      * 댓글 수정
      */
     public void updateComments(long id,Comments comments) {
@@ -95,7 +96,6 @@ public class CommentsService {
     }
 
 
-
     //댓글삭제
     public void deleteComment(long id){
         log.info("deleteComment()가실행됨\n불러온id값:{}",id);
@@ -103,15 +103,24 @@ public class CommentsService {
     }
 
 
-    public List<Comments> getCommentsByUserId(String username, Pagination pagination){
-        log.info("getCommentsByUserId()가 실행됨\n입력된검색어:{}",username);
+    /**
+     * @param username 유저이름
+     * @param pagination 페이징설정
+     * @return 유저이름으로 작성된 댓글을 불러옵니다.
+     */
+    public List<Comments> getCommentsByUserId(String userName, Pagination pagination){
+        log.info("getCommentsByUserId()가 실행됨\n입력된검색어:{}",userName);
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("username", username);
+        paramMap.put("username", userName);
         paramMap.put("startList", pagination.getStartList());
         paramMap.put("listSize", pagination.getListSize());
         return commentsMapper.getCommentsByUserId(paramMap);
     }
 
+    /**
+     * @param userName
+     * @return 유저이름으로 작성된 댓글 수를 반환
+     */
     public int getCommentsCountByUserName(String userName){
         int result = commentsMapper.getCommentsCountByUserName(userName);
         log.info("getCommentsCountByUserName({})이 실행되었습니다.",result);

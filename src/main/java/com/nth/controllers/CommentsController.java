@@ -44,30 +44,22 @@ public class CommentsController {
     //댓글 작성
     @PostMapping("/comments")
     public String createComment(Comments comment, @RequestParam("postId") Long postId
-            , Principal principal, Model model, RedirectAttributes redirectAttributes,
+            , Principal principal, RedirectAttributes redirectAttributes,
                                 @Valid CommentForm commentForm, BindingResult result) {
         if (principal == null) {
-            log.info("/comments 요청됨\n" +
-                    "해당요청에서 principal==null이 감지되었습니다.");
+            log.info("/comments 요청됨\n 요청에서 principal==null이 감지되었습니다.");
             redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
             return "redirect:/post/" + postId;
         }
+
+        // 유효성 검사 후 에러 반환
         String errorResult = validateCheck(result, commentForm, redirectAttributes, postId);
         if (errorResult != null) {
             return errorResult;
-        } // 유효성 검사
-        comment.setPostId(postId); // 현재 postid를 넣어줌
-        comment.setContent(commentForm.getContent());
+        }
 
-        //model.addAttribute("action","/comments"); //에 추가
         UserInfo userInfo = userInfoService.findByUsername(principal.getName());
-        commentsService.createComment(comment, userInfo);
-        log.info("/comments 실행됨" +
-                        "\n*******************************************\n" +
-                        "게시글 ID: {}\n" +
-                        "입력된 댓글: {}" +
-                        "\n*******************************************"
-                , postId, comment.getContent()); // 댓글작성확인 로그
+        commentsService.createComment(postId,commentForm, userInfo);
         return "redirect:/post/" + postId;
 
     }
@@ -89,10 +81,6 @@ public class CommentsController {
         String authorityCheckResult = checkAuthorAccess(comment,principal,redirectAttributes,"수정",postId);
         if (authorityCheckResult != null) return authorityCheckResult; // 작성된 게시글과 로그인한 유저의 이름 및 권한을 체크하고 리다이렉트 해줍니다.
 
-//        String authorityCheckResult = checkUserName(principal,comment, postId, redirectAttributes,"삭제");
-//        if (authorityCheckResult != null) return authorityCheckResult; // 유저권한 체크 이름과 작성자가 같은지 체크
-
-
         // 댓글을 삭제합니다.
         commentsService.deleteComment(id);
         return "redirect:/post/" + postId;
@@ -103,9 +91,7 @@ public class CommentsController {
             , RedirectAttributes redirectAttributes,Principal principal) {
 
         Comments updateComment = commentsService.getCommentById(id);
-        log.info("/post/modify/{id} GET 수정요청이 들어왔습니다." +
-                "\n게시물 id 값:{}" +
-                "\n댓글id값:{}",postId,id);
+        log.info("/post/modify/{id} GET 수정요청이 들어왔습니다.\n게시물 id 값:{}\n댓글id값:{}",postId,id);
 
         if (updateComment == null) {
             log.error("댓글이 삭제 되어 댓글을 수정 할 수 없습니다. {} 접근 postid:{}",id,postId);
@@ -135,8 +121,7 @@ public class CommentsController {
         log.info("/post/c/modify/{id} 포스트 요청이 들어왔습니다.", id);
         Comments Comment = commentsService.getCommentById(id);
         if (Comment == null) {
-            log.error("댓글이 이미 삭제 되었습니다 {}" +
-                    "접근 postid:{}" + id, postId);
+            log.error("댓글이 이미 삭제 되었습니다 {}접근 postid:{}" + id, postId);
             redirectAttributes.addFlashAttribute("errorMessage", "댓글이 이미 삭제되었습니다.");
             return "redirect:/post/" + postId;
         }

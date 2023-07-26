@@ -44,7 +44,7 @@ public class LikeController {
             redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
             return "redirect:/post/"+postId;
         }
-        if(!postService.postIdcheck(postId)){
+        if(!postService.postIdCheck(postId)){
             log.info("게시물이존재하지 않습니다.");
             redirectAttributes.addFlashAttribute("errorMessage","게시물이 존재 하지 않습니다.");
             return "redirect:/post";
@@ -93,7 +93,7 @@ public class LikeController {
             redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
             return "redirect:/post/"+postId;
         }
-        if(!postService.postIdcheck(postId)){
+        if(!postService.postIdCheck(postId)){
             log.info("게시물이존재하지 않습니다.");
             redirectAttributes.addFlashAttribute("errorMessage","게시물이 존재 하지 않습니다.");
             return "redirect:/post";

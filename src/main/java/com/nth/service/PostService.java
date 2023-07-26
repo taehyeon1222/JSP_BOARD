@@ -5,17 +5,12 @@ import com.nth.domain.UserInfo;
 import com.nth.dto.PostForm;
 import com.nth.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.javassist.NotFoundException;
 import org.mybatis.spring.MyBatisSystemException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +23,9 @@ public class PostService {
 
     private final PostMapper postMapper;
 
-    private final LikeService likeService;
 
 
+    /******************************게시글 조회 ************************/
 
     /**
      * 전체 게시글 가져오기
@@ -44,6 +39,7 @@ public class PostService {
      * id로 가져오기
      * @param id
      * @return
+     * 게시글 을 조회합니다.
      */
     public Post getPostById(Long id) {
         Post post = postMapper.getPostById(id);
@@ -59,27 +55,11 @@ public class PostService {
         //increaseViewCount(id);
         return post;
     }
-
     /**
-     *
-     * @param id
-     * @return
-     * post를 맵핑해고 조회수를 추가해줍니다.
-     */
-    public Post viewPost(Long id){
-        log.info("viewPost({})가 실행되었습니다",id);
-        Post post = postMapper.getPostById(id);
-        increaseViewCount(id); //조회수반환
-        return post;
-    }
-
-
-    /**
-     *
      * @param postId
      * @return 게시물 존재 여부 체크
      */
-    public boolean postIdcheck(Long postId) {
+    public boolean postIdCheck(Long postId) {
         log.info("postIdcheck가 실행되었습니다.{},의 게시물의 존재여부 : ",postId);
         Post post = postMapper.getPostById(postId);
         log.info("게시물의 존재여부 : ",post != null);
@@ -87,6 +67,7 @@ public class PostService {
     }
 
 
+    /******************************게시글 작성************************/
     /**
      *
      * @param postForm 게시글폼
@@ -116,9 +97,6 @@ public class PostService {
         );
         return post;
     }
-
-
-
     //게시물 수정서비스
     public void updatePost(long id, PostForm postForm) {
         log.info("updatePost()가 실행되었습니다.\n 요청된 게시물 id: {}", id);
@@ -136,8 +114,6 @@ public class PostService {
         postMapper.updatePost(updatePost);
         log.info("게시물이 수정 되었습니다.");
     }
-
-
     //게시물삭제서비스
     public void deletePost(long id) {
         log.info("deletePost()가 실행되었습니다.\n 요청된 게시물 id: {}", id);
@@ -153,71 +129,28 @@ public class PostService {
         log.info("게시물이 성공적으로 삭제되었습니다.");
     }
 
-
-
-    //게시물 카운트 페이징처리
-    public int getPostCount() {
-        return postMapper.getPostCount();
-    }
-
-
-
+    /******************************게시글 페이징 ************************/
 
     /**
-    게시글 목록 불러오기 pagination을 값으로 넘겨 받아야함
+     * @param kw 키워드
+     * @param pagination 페이징설정값
+     * @param category 카테고리
+     * @return 카테고리 와 키워드(제목+내용)으로 게시글 검색
      */
-    public List<Post> getPostList(Pagination pagination) {
-        int listCnt = postMapper.getPostCount();
-        pagination.pageInfo(pagination.getPage(), pagination.getRange(), listCnt);
-        List<Post> postList = postMapper.getPostList(pagination);
-
-        for (Post post : postList) {
-            Long likeCount = likeService.countLike(post.getId());
-            post.setLikeCount(likeCount);
-        }
-
-        // 로깅을 통해 작성일 값 확인
-//        for (Post post : postList) {
-//
-////            log.info("getPostList()메소드가 실행되었습니다.\n" +
-////                            "********************불러온게시물********************"+
-////                            "\nid값: {}"+
-////                            "\n제목: {}"+
-////                            "\n내용: {}"+
-////                            "\n작성자: {}"+
-////                            "\n********************불러온게시물********************",
-////                    post.getId(), post.getTitle(), post.getContent(), post.getUserInfo().getUsername()
-////            );
-//
-//
-//        }
-
-        return postList;
-    }
-
-
-    public List<Post> searchPostList(String kw,Pagination pagination,String category) {
-        log.info("searchPostList()가 실행됨\n입력된검색어:{}",kw);
+    public List<Post> searchPostTitleCategoryList(String kw,Pagination pagination,String category) {
+        log.info("searchPostTitleCategoryList()가 실행됨\n입력된검색어:{}",kw);
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("title", kw);
         paramMap.put("category", category); // category 파라미터 추가
         paramMap.put("startList", pagination.getStartList());
         paramMap.put("listSize", pagination.getListSize());
-        return postMapper.searchPostList(paramMap);
+        return postMapper.searchPostTitleCategoryList(paramMap);
     }
 
-
-
-
     /**
-     *
      * @param username 키워드 및 유저이름
      * @param pagination 페이징 설정값.
-     * <br>
-     *  pagination.pageInfo(page, range, listCount); <br>
-     *  pagination.setTotalCount(listCount);
-     *
-     * @return 유저이름 게시글 객체값 반환 searchPostUsernameList
+     * @return 유저이름으로 검색 (카테고리를 무시) 유저정보에서 사용중
      */
     public List<Post> searchPostUsernameList(String username, Pagination pagination) {
         log.info("searchPostIdList()가 실행됨\n입력된검색어:{}",username);
@@ -228,15 +161,11 @@ public class PostService {
         return postMapper.searchPostUsernameList(paramMap);
     }
 
-/* 페이징 유저 카테고리 추가 */
-
     /**
-     *
      * @param username 유저이름
      * @param pagination 페이징설정값
      * @param category 카테고리
-     * @return
-     * 유저이름으로 검색 + 카테고리
+     * @return 유저이름으로 검색 + 카테고리 검색
      */
     public List<Post> searchPostUsernameCategoryList(String username, Pagination pagination,String category) {
         log.info("searchPostIdList()가 실행됨\n입력된검색어:{}",username);
@@ -250,22 +179,19 @@ public class PostService {
 
 
     /**
-     *
      * @param keyword
-     * @return
-     * 총 게시글 수를 키워드로 반환 ( 카테고리를 무시함)
+     * @return 총 게시글 수 를 키워드로 반환(카테고리를 무시함)
      */
     public int getPostCountByTitle(String keyword) {
         int result = postMapper.getPostCountByTitle(keyword);
         log.info("getPostCountByTitle({})가 실행되었습니다.\n 검색된 게시글 수의 반환값:{}",keyword,result);
         return result;
     }
-
     /**
      *
      * @param keyword
      * @param category
-     * @return 총 게시글수를 카테고리를 포함해서 반환
+     * @return 키워드로 총 게시글수를 카테고리를 포함해서 반환
      */
     public int getPostCountByTitleAndCategory(String keyword, String category) {
         Map<String, String> params = new HashMap<>();
@@ -277,20 +203,16 @@ public class PostService {
         return result;
     }
 
-
-
     /**
-     *
      * @param userName
      * @return
-     * userName로 값을 받아서 전체 게시글 수를 반환해줍니다.
+     * 유저이름으로 값을 받아서 전체 게시글 수 를 반환해줍니다.(카테고리를 무시함)
      */
-    public int getPostCountByUserId(String userName) {
+    public int getPostCountByUserName(String userName) {
         int result = postMapper.getPostCountByUserName(userName);
         log.info("getPostCountByUserId({})가 실행되었습니다.\n 검색된 게시글 수의 반환값:{}",userName,result);
         return result;
     }
-
     /**
      *
      * @param keyword
@@ -298,7 +220,7 @@ public class PostService {
      * @return
      *  유저이름 + 카테고리로 총 게시글 수를 반환해줍니다.
      */
-
+    //유저이름과 카테고리로 검색
     public int getPostCountByUserNameAndCategory(String keyword, String category) {
         Map<String, String> params = new HashMap<>();
         params.put("userName", keyword);
@@ -308,34 +230,48 @@ public class PostService {
         return result;
     }
 
+    /******************************그 외  ************************/
+
     /**
-    조회수
+     *
+     * @param id
+     * @return
+     * post를 맵핑하고 조회수를 추가해줍니다.
+     */
+    public Post viewPost(Long id){
+        log.info("viewPost({})가 실행되었습니다",id);
+        Post post = postMapper.getPostById(id);
+        increaseViewCount(id); //조회수반환
+        return post;
+    }
+    /**
+    조회수 추가
      */
     public void increaseViewCount(Long id) {
         log.info("increaseViewCount({})가 실행되었습니다.",id);
         postMapper.increaseViewCount(id);
     }
 
+//    /**
+//     * 게시글 작성 테스트케이스에서 작성 이후 지우길
+//     * @param title
+//     * @param content
+//     */
+//    public void createPost(String title, String content) {
+//        Post post = new Post();
+//        post.setTitle(title);
+//        post.setContent(content);
+//        postMapper.insertPost(post);
+//    }
 
-
-
-
+    /******************************유틸 메서드 ************************/
 
 
     /**
-     * 게시글 작성 테스트케이스에서 작성 이후 지우길
-     * @param title
-     * @param content
+     *
+     * @param postForm
+     * 카테고리 접근권한체크
      */
-    public void createPost(String title, String content) {
-        Post post = new Post();
-        post.setTitle(title);
-        post.setContent(content);
-        postMapper.insertPost(post);
-    }
-
-
-
     private void checkAdminCategory(PostForm postForm){
         if("공지사항".equals(postForm.getCategory()) &&
                 (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated() ||
@@ -344,13 +280,14 @@ public class PostService {
         }
     }
 
-    private void checkAdminAndResetCategory(PostForm postForm) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if ("공지사항".equals(postForm.getCategory()) &&
-                (!auth.isAuthenticated() || !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))) {
-            postForm.setCategory("자유");
-        }
-    }
+//
+//    private void checkAdminAndResetCategory(PostForm postForm) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if ("공지사항".equals(postForm.getCategory()) &&
+//                (!auth.isAuthenticated() || !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))) {
+//            postForm.setCategory("자유");
+//        }
+//    }
 
 
 
