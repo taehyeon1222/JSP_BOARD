@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Basic Page - SB UI Kit Pro</title>
+    <title>nth_home</title>
     <link href="/css/styles.css" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon.png" />
     <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous"></script>
@@ -23,7 +23,9 @@
             <!-- Navbar-->
             <nav class="navbar navbar-marketing navbar-expand-lg bg-transparent navbar-dark fixed-top">
                 <div class="container px-5">
-                    <a class="navbar-brand text-white" href="/">NTH</a>
+                    <h1>
+                    <a class="navbar-brand text-white"  style="font-size: 40px;" href="/">NTH</a>
+                    </h1>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i data-feather="menu"></i></button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto me-lg-5">

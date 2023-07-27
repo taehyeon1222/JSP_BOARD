@@ -147,17 +147,18 @@
                         </div>
                     </c:if>
 
-                    <div class="form-group m-2 p-2 d-flex">
-                        <div class="d-flex flex-column justify-content-center">
-                            <a href="/signup">계정이 없을 경우 여기를 눌러 가입 신청을 해주세요.</a>
-                        </div>
-                        <div class="d-flex flex-column justify-content-end ml-auto">
-                            <button class="btn btn-primary m-2" style="position: relative; right: -130px;" type="submit">로그인</button>
-                        </div>
-                    </div>
+        <div class="form-group m-2 p-2 d-flex justify-content-between">
+            <div>
+                <a href="/signup">계정이 없을 경우 여기를 눌러 가입 신청을 해주세요.</a>
+            </div>
+            <div>
+                <button class="btn btn-primary m-2" type="submit">로그인</button>
+            </div>
+        </div>
 
-                    <div class="p-3" style="background:#21283208">
-                        <p class=" text-dark border-top">공용테스트 계정<br>아이디:user<br>비밀번호:1234</p>
+
+        <div class="p-3 border-top" style="background:#21283208">
+                        <p class=" text-dark ">공용테스트 계정<br>아이디:user<br>비밀번호:1234</p>
                         <p class="text-muted">테스트 계정은 누구나 이용가능합니다.</p>
                     </div>
                 </form>
