@@ -3,6 +3,8 @@ package com.nth.domain;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 
 @Getter
 @Setter
@@ -11,7 +13,7 @@ public class Comments {
     private String content;
     private Long postId;
     private Long userId;
-    private String createdDate;
+    private Date createdDate;
     private UserInfo userInfo;
     private String title;
     private int likeCount;

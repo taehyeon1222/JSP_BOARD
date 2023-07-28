@@ -48,7 +48,7 @@ public class CommentsController {
                                 @Valid CommentForm commentForm, BindingResult result) {
         if (principal == null) {
             log.info("/comments 요청됨\n 요청에서 principal==null이 감지되었습니다.");
-            redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
+            redirectAttributes.addFlashAttribute("error", "로그인이 필요합니다.");
             return "redirect:/post/" + postId;
         }
 
@@ -71,14 +71,15 @@ public class CommentsController {
         Comments comment = commentsService.getCommentById(id);
         //Long postId = comment.getPostId(); //게시물의 id를 얻어옴
         if (comment == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "댓글이 이미 삭제되었습니다.");
+            redirectAttributes.addFlashAttribute("error", "댓글이 이미 삭제되었습니다.");
             log.error("접근하려는 댓글이 존재하지 않습니다." + id);
             return "redirect:/post/" + postId;
         }
-
         log.info("/post/Comment/delete/{} 삭제요청이 들어왔습니다\n게시물id:{}\n댓글id:{} 게시글작성자{}", id, postId, id,comment.getUserInfo().getUsername());//댓글삭제로그
 
+        // 로그인 상태 및 유저권한 상태 체크 비정상적인 접속을 막음
         String authorityCheckResult = checkAuthorAccess(comment,principal,redirectAttributes,"수정",postId);
+
         if (authorityCheckResult != null) return authorityCheckResult; // 작성된 게시글과 로그인한 유저의 이름 및 권한을 체크하고 리다이렉트 해줍니다.
 
         // 댓글을 삭제합니다.
@@ -95,7 +96,7 @@ public class CommentsController {
 
         if (updateComment == null) {
             log.error("댓글이 삭제 되어 댓글을 수정 할 수 없습니다. {} 접근 postid:{}",id,postId);
-            redirectAttributes.addFlashAttribute("errorMessage", "댓글이 이미 삭제되었습니다.");
+            redirectAttributes.addFlashAttribute("error", "댓글이 이미 삭제되었습니다.");
             return "redirect:/post/" + postId;
         }
 
@@ -111,28 +112,26 @@ public class CommentsController {
         model.addAttribute("comments", comments);
         model.addAttribute("updateComment", updateComment);
         return "post/post_detail";
-
     }
-
-
     @PostMapping("/post/{postId}/c/modify/{id}")
     public String ModifyComment(@PathVariable long id, @PathVariable long postId, @ModelAttribute Comments comment
             , RedirectAttributes redirectAttributes,@Valid CommentForm commentForm, BindingResult result) {
         log.info("/post/c/modify/{id} 포스트 요청이 들어왔습니다.", id);
+
         Comments Comment = commentsService.getCommentById(id);
         if (Comment == null) {
             log.error("댓글이 이미 삭제 되었습니다 {}접근 postid:{}" + id, postId);
-            redirectAttributes.addFlashAttribute("errorMessage", "댓글이 이미 삭제되었습니다.");
+            redirectAttributes.addFlashAttribute("error", "댓글이 이미 삭제되었습니다.");
             return "redirect:/post/" + postId;
         }
 
+        //댓글유효성 검사
         String errorResult = validateCheck(result, commentForm, redirectAttributes, postId);
         if (errorResult != null) {
             return errorResult;
         }
 
-        Comment.setContent(comment.getContent());
-        commentsService.updateComments(comment.getId(), comment);
+        commentsService.updateComments(comment.getId(), commentForm);
         return "redirect:/post/" + comment.getPostId();
     }
 

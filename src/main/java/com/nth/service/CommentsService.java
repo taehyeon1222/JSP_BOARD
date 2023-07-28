@@ -84,13 +84,14 @@ public class CommentsService {
      * @param comments 댓글정보
      * 댓글 수정
      */
-    public void updateComments(long id,Comments comments) {
+    public void updateComments(long id,CommentForm comments) {
         log.info("updateComments()가 실행되었습니다. id값: {}, comments값: {}", id, comments.getContent());
         Comments comment = commentsMapper.getCommentById(id);
         if (comment == null) {
             throw new RuntimeException("해당 ID에 대한 코멘트를 찾을 수 없습니다: " + id);
         }
         // 코멘트의 내용을 업데이트
+
         comment.setContent(comments.getContent());
         commentsMapper.updateComment(comment);
     }
