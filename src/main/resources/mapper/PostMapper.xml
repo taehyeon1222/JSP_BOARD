@@ -14,7 +14,7 @@
 -->
     <!--게시글 조인 조회-->
     <select id="getPostById" parameterType="long" resultType="com.nth.domain.Post">
-        SELECT P.ID, P.TITLE, P.CONTENT, P.CREATED_DATE AS createdDate, P.USER_ID AS userId, P.VIEWS AS views,
+        SELECT P.ID, P.TITLE, P.CONTENT, P.CREATED_DATE AS createdDate, P.USER_ID AS userId, P.VIEWS AS views, P.CATEGORY,
                U.ID AS "userInfo.id", U.USERNAME AS "userInfo.username",
                U.CREATED_AT AS "userInfo.createdDate"
         FROM "POST" P

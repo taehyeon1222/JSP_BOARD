@@ -19,16 +19,15 @@
 <body>
 <div id="layoutDefault">
     <div id="layoutDefault_content">
-        <main>
+
             <!-- Navbar-->
             <%@ include file="layout/nav.jsp" %>
 
             <header class="page-header-ui page-header-ui-dark bg-gradient-primary-to-secondary">
                 <div class="page-header-ui-content pt-10">
-                    <div class="container px-5 text-center">
+                    <div class="container px-5 ">
                         <div class="row gx-5 align-items-center">
                             <div class="col-lg-6" data-aos="fade-up">
-
                                 <!--비 인증 사용자 화면-->
                                 <sec:authorize access="!isAuthenticated()">
                                 <h1 class="page-header-ui-title">반갑습니다.</h1>
@@ -47,8 +46,8 @@
 
                                     <!-- 인증 사용자 화면-->
                                     <sec:authorize access="isAuthenticated()">
-                                    <h1 class="page-header-ui-title">님 반갑습니다.</h1>
-                                    <div class="d-flex flex-column flex-sm-row">
+                                    <h1 class="page-header-ui-title">${username}님 반갑습니다.</h1>
+                                    <div class="d-flex flex-column flex-sm-row ">
                                         </sec:authorize>
 
                                         <sec:authorize access="isAuthenticated()">
@@ -73,6 +72,8 @@
                     <!-- Rounded SVG Border-->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor"><path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path></svg>
                 </div>
+                </div>
+
             </header>
 
 
@@ -93,12 +94,12 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor"><path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path></svg>
                 </div>
             </section>
-        </main>
-    </div>
 
+    </div>
     <%@ include file="layout/footer.jsp" %>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="/js/scripts.js"></script>
+
 </body>
 </html>

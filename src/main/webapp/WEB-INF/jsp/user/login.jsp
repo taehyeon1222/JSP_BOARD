@@ -18,7 +18,7 @@
 </head>
 
 <!-- Navbar-->
-<%@ include file="layout/nav.jsp" %>
+<%@ include file="../layout/nav.jsp" %>
 <!-- Navbar-->
 
 
@@ -96,7 +96,7 @@
 </div>
 
 
-<%@ include file="layout/footer.jsp" %>
+<%@ include file="../layout/footer.jsp" %>
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

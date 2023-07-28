@@ -52,7 +52,7 @@ public class UserInfoController {
     @GetMapping("/signup")
     public String signup(Principal principal) {
 
-         return "signup_form";
+         return "user/signup_form";
      }
 
     //회원가입
@@ -101,7 +101,7 @@ public class UserInfoController {
     @GetMapping("/login")
     public String login() {
         log.info("@GetMapping(\"/login\")실행됨");
-        return "login";
+        return "user/login";
     }
 
     //유저정보
@@ -132,7 +132,7 @@ public class UserInfoController {
         model.addAttribute("postList",postList); // 게시글 객체를 뷰에 전달
         model.addAttribute("pagination", pagination); //페이징 정보를 객체에 전달
         model.addAttribute("user", user); // 유저 객체를 뷰에 전달
-        return "userinfo";
+        return "user/userinfo";
     }
 
     //게시글확인
@@ -156,7 +156,7 @@ public class UserInfoController {
         model.addAttribute("postList",postList); // 게시글 객체를 뷰에 전달
         model.addAttribute("pagination", pagination); //페이징 정보를 객체에 전달
         model.addAttribute("user", user); // 유저 객체를 뷰에 전달
-        return "userInfoPost";
+        return "user/userInfoPost";
     }
     //댓글보기
     @GetMapping("/userinfo/comment")
@@ -182,7 +182,7 @@ public class UserInfoController {
         //model.addAttribute("postList",postList); // 게시글 객체를 뷰에 전달
         model.addAttribute("pagination", pagination); //페이징 정보를 객체에 전달
         model.addAttribute("user", user); // 유저 객체를 뷰에 전달
-        return "userInfoComment";
+        return "user/userInfoComment";
     }
 
     //비밀번호 변경
@@ -190,7 +190,7 @@ public class UserInfoController {
     @GetMapping("/userinfo/modify")
     public String userModify(){
         log.info("/userinfo/modify 경로의 겟맵핑 실행됨");
-        return "userModifyForm";
+        return "user/userModifyForm";
     }
 
     //비밀번호 변경
@@ -206,14 +206,14 @@ public class UserInfoController {
         }
         if (bindingResult.hasErrors()) {
             log.error("userModify()에서 검증 오류 발생: {}", bindingResult.getAllErrors());
-            return "userModifyForm";
+            return "user/userModifyForm";
         }
         try {
             userInfoService.changePassword(principal.getName(), userPasswordModify.getPassword(),userPasswordModify.getNewPassword());
         } catch (Exception e) {
             log.info(e.getMessage());
             model.addAttribute("errorMessage", e.getMessage());
-            return "userModifyForm";
+            return "user/userModifyForm";
         }
         // 로그아웃 처리
         SecurityContextHolder.getContext().setAuthentication(null);  // 보안 컨텍스트 초기화

@@ -110,7 +110,7 @@ public class CommentsController {
         model.addAttribute("post", post);
         model.addAttribute("comments", comments);
         model.addAttribute("updateComment", updateComment);
-        return "post_detail";
+        return "post/post_detail";
 
     }
 

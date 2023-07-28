@@ -20,7 +20,7 @@
 
 
 <!-- Navbar-->
-<%@ include file="layout/nav.jsp" %>
+<%@ include file="../layout/nav.jsp" %>
 
 
 <!--회원가입 틀 -->
@@ -126,7 +126,7 @@
 
 </section>
 <!--회원가입 틀 -->
-<%@ include file="layout/footer.jsp" %>
+<%@ include file="../layout/footer.jsp" %>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="/js/scripts.js"></script>

@@ -47,17 +47,22 @@ public class homeController {
     private final LikeService likeService;
     private static final Logger log = LoggerFactory.getLogger(homeController.class);
     @GetMapping("/home")
-    public String test(Principal principal){
+    public String test(Principal principal ){
+
         return "header-basic";
     }
     @GetMapping("/")
-    public String root(Principal principal){
+    public String root(Principal principal,Model model){
         log.info("root()실행됨\n현재경로: / ");
         if(principal==null){
             log.info("로그인정보메세지\n현재로그인되어있지않습니다.");
         }else{
+            String username = principal.getName();
             log.info("로그인정보메세지\n현재 로그인 되어있습니다\n로그인 계정:{}",principal.getName());
+            model.addAttribute("username",username);
         }
+
+
         return "home";
     }
 
@@ -102,7 +107,7 @@ public class homeController {
         model.addAttribute("pagination", pagination); // 페이징값
         model.addAttribute("postList", postList); // 검색결과 반환
 
-        return "postList";
+        return "post/postList";
     }
 
 
@@ -135,14 +140,14 @@ public class homeController {
         model.addAttribute("post", post);
         model.addAttribute("comments", comments);
 
-        return "post_detail";
+        return "post/post_detail";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public String createPost(Model model) {
         model.addAttribute("formActionUrl", "/create");
-        return "postcreate";}
+        return "post/postcreate";}
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
@@ -175,7 +180,7 @@ public class homeController {
         postForm.setCategory(post.getCategory());
         model.addAttribute("formActionUrl", "/post/modify/" + id);
         model.addAttribute("postForm", postForm);
-        return "postcreate";
+        return "post/postcreate";
     }
 
     @PostMapping("/post/modify/{id}")
@@ -272,12 +277,12 @@ public class homeController {
     private String validateCheck(BindingResult bindingResult,PostForm postForm, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             // 폼 검증 실패 시 에러 메시지 추가
-            redirectAttributes.addFlashAttribute("commentForm",postForm);
+            redirectAttributes.addFlashAttribute("postForm",postForm);
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
 
             List<ObjectError> errors = bindingResult.getAllErrors();
             for (ObjectError error : errors) {
-                log.info("댓글 작성실패\n유효성 검사 오류로 인해 등록하지 못했습니다.\n실패이유: {}", error.getDefaultMessage());
+                log.info("작성실패\n유효성 검사 오류로 인해 등록하지 못했습니다.\n실패이유: {}", error.getDefaultMessage());
                 redirectAttributes.addFlashAttribute("postForm",postForm);
                 return "redirect:/create"; // 에러 발생 시 돌아갈 페이지
             }
