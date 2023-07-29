@@ -223,6 +223,12 @@ public class UserInfoController {
         return "redirect:/";
     }
 
+    @GetMapping("/userinfo/deleteCheck")
+    public String deleteUserCheck(){
+        return "user/userInfoCancellation";
+    }
+
+
     //
     @GetMapping("/userinfo/delete")
     @PreAuthorize("isAuthenticated()")
@@ -233,6 +239,7 @@ public class UserInfoController {
             redirectAttributes.addFlashAttribute("successMessage", "비정상적인 접근 감지. 로그인 후 이용 가능합니다.");
             return "redirect:/login";
         }
+
         String username = principal.getName(); // 사용자 이름 리턴
         UserInfo user = userInfoService.findByUsername(username);
         userInfoService.deleteUserinfo(user.getId());

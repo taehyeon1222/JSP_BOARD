@@ -61,10 +61,17 @@ public class homeController {
             log.info("로그인정보메세지\n현재 로그인 되어있습니다\n로그인 계정:{}",principal.getName());
             model.addAttribute("username",username);
         }
+        List<Post> postList;
+        postList = postService.getNotice();
 
+        List<Post> topList;
+        topList = postService.getTopPost();
 
+        model.addAttribute("topList", topList); // 검색결과 반환
+        model.addAttribute("postList", postList); // 검색결과 반환
         return "home";
     }
+
 
     @GetMapping("/post")
     public String getPostList(Model model,

@@ -1,20 +1,51 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<a href="/userinfo/post">내가쓴 글</a>
-<a href="/userinfo/comment">내가쓴 댓글</a>
-<table>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+<%@ taglib prefix="sce" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>로그인</title>
+    <link href="/css/styles.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="/assets/img/favicon.png" />
+    <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" crossorigin="anonymous"></script>
+</head>
+
+
+<%@ include file="../layout/nav.jsp"%>
+<%@ include file="../layout/form2.jsp" %>
+
+<ul class="pagination">
+    <li class="d-flex">
+        <a class="page-link page-item active" href="/userinfo/post">내가쓴 글</a>
+        <a class="page-link" href="/userinfo/comment">내가쓴 댓글</a>
+    </li>
+</ul>
+
+</table>
+<table class="table table-hover">
     <tr>
         <th>순번</th>
         <th>제목</th>
+        <th>작성자</th>
         <th>작성일</th>
         <th>조회수</th>
         <th>추천수</th>
+
     </tr>
     <c:forEach var="post" items="${postList}" varStatus="status">
         <tr>
             <td>${(status.index + 1) + (pagination.page - 1) * pagination.listSize}</td>
             <td><a href="/post/${post.id}">${post.title}</a></td>
-            <td>${post.createdDate}</td>
+            <th>${post.userInfo.username}</th>
+            <td><fmt:formatDate value="${post.createdDate}" pattern="yyyy-MM-dd" /></td>
             <td>${post.views}</td>
             <td>${post.likeCount}</td>
         </tr>
@@ -24,34 +55,71 @@
 <!--검색결과 null 체크-->
 <c:choose>
     <c:when test="${empty postList}">
-        <p>작성된 게시글이 없습니다..</p>
+        <p>검색 결과가 없습니다.</p>
     </c:when>
 </c:choose>
 <!--검색결과 null 체크-->
 
 <!-- 하단페이징 처리-->
-<div>
-    <c:if test="${pagination.page > 1}">
-        <a href="?page=${pagination.page-1}">이전</a>
-    </c:if>
+<div class="d-flex justify-content-center align-items-center">
+    <!-- 이전 -->
+    <ul class="pagination">
+        <li>
+            <c:if test="${pagination.page > 1}">
+                <a class="page-link" href="?category=${category}&searchType=${searchType}&keyword=${keyword}&page=${pagination.page-1}">
+                    <font style="vertical-align: inherit;"><font style="vertical-align: inherit;">&laquo;</font></font></a>
+            </c:if>
+        </li>
+        <!-- 이전 -->
 
-    <c:set var="startPage" value="${pagination.page - 2 <= 0 ? 1 : pagination.page - 2}" />
 
-    <c:set var="endPage" value="${startPage + 4 >= pagination.pageCnt ? pagination.pageCnt : startPage + 4}" />
+        <c:set var="startPage" value="${pagination.page - 2 <= 0 ? 1 : pagination.page - 2}" />
+        <c:set var="endPage" value="${startPage + 4 >= pagination.pageCnt ? pagination.pageCnt : startPage + 4}" />
+        <c:forEach var="i" begin="${startPage}" end="${endPage}">
 
-    <c:forEach var="i" begin="${startPage}" end="${endPage}">
-        <c:choose>
-            <c:when test="${i == pagination.page}">
-                <a href="?page=${i}">${i}</a>
+
+        <li class="page-item active">
+            <c:choose>
+            <c:when test="${i == pagination.page}"> <!--현재페이지-->
+                <a class="page-link" href="?category=${category}&searchType=${searchType}&keyword=${keyword}&page=${i}">${i}<font style="vertical-align: inherit;"><font style="vertical-align: inherit;"></font></font></a>
             </c:when>
             <c:otherwise>
-                <a href="?page=${i}">${i}</a>
-            </c:otherwise>
-        </c:choose>
-    </c:forEach>
+        </li>
 
-    <c:if test="${pagination.page < pagination.pageCnt}">
-        <a href="?page=${pagination.page+1}">다음</a>
-    </c:if>
+        <li class="page-item"> <!--페이지 번호-->
+            <a class="page-link" href="?category=${category}&searchType=${searchType}&keyword=${keyword}&page=${i}">${i}<font style="vertical-align: inherit;"><font style="vertical-align: inherit;"></font></font></a>
+            </c:otherwise>
+            </c:choose>
+            </c:forEach>
+
+        </li>
+
+
+        <li><!-- 다음-->
+            <c:if test="${pagination.page < pagination.pageCnt}">
+                <a class="page-link" href="?category=${category}&searchType=${searchType}&keyword=${keyword}&page=${pagination.page+1}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">&raquo;</font></font></a>
+            </c:if>
+        </li> <!-- 다음-->
+
+
+
+    </ul>
 </div>
 
+
+
+
+
+
+
+</ul>
+
+
+<div>
+    <%@ include file="../layout/footer.jsp" %>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/js/scripts.js"></script>
+</html>

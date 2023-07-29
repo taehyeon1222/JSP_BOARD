@@ -49,6 +49,10 @@ public interface PostMapper {
      * 카테고리 + 아이디로 int 총게시글 수 반환
      */
     int getPostCountByUserNameAndCategory(Map<String, String> params);
+
+    List<Post> getNotice();
+
+    List<Post> getTopPost();
 }
 
 

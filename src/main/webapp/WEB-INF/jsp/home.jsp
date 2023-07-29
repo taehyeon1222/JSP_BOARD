@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <%@ taglib prefix="sce" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,11 +37,11 @@
                                 </sec:authorize>
 
                                     <sec:authorize access="!isAuthenticated()">
-                                        <a class="btn btn-lg btn-primary fw-500 me-sm-3 mb-3 mb-sm-0" href="#explore">
+                                        <a class="btn btn-lg btn-primary fw-500 me-sm-3 mb-3 mb-sm-0" href="/login">
                                             로그인
                                             <i class="ms-2" data-feather="arrow-right"></i>
                                         </a>
-                                        <a class="btn btn-lg btn-primary-soft text-primary fw-500" href="https://docs.startbootstrap.com/sb-ui-kit-pro/quickstart" target="_blank">회원가입</a>
+                                        <a class="btn btn-lg btn-primary-soft text-primary fw-500" href="/signup" target="_blank">회원가입</a>
                                     </sec:authorize>
                                     <!--비 인증 사용자 화면-->
 
@@ -65,7 +66,6 @@
                             <div class="col-lg-6 d-none d-lg-block" data-aos="fade-up" data-aos-delay="100"><img class="img-fluid" src="/assets/img/illustrations/programming.svg" alt="..." /></div>
                         </div>
 
-
                     </div>
                 </div>
                 <div class="svg-border-rounded text-light">
@@ -82,12 +82,70 @@
 
 
             <section class="bg-white py-10">
-                <div class="container px-5">
-                    <h1>This is a basic content page.</h1>
-                    <p class="lead">You can use this page as a starting point to create your own custom pages, or choose an already built example page to start development!</p>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui quisquam animi temporibus ipsum iusto necessitatibus laudantium beatae. Eligendi dolorum laudantium numquam? Officiis nemo error animi aliquam dolor consequatur ducimus unde.</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui repellat magni eaque beatae explicabo fugit placeat earum, dolores quaerat aperiam vero adipisci quidem minus officiis blanditiis unde? Incidunt, ea ad.</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis sed illum soluta, quaerat et deleniti magnam laudantium, non omnis numquam quos placeat. Porro autem consectetur dolor minima voluptatum modi maiores.</p>
+                <div class="container">
+                    <div class="row">
+                        <!-- 왼쪽 컬럼 (공지사항) -->
+                        <div class="col-6">
+                            <div class="alert alert-primary m-0">
+                                <span>공지글</span>
+                            </div>
+
+                            <div class="alert alert-primary">
+
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th>제목</th>
+                                        <th>작성자</th>
+                                        <th>작성일</th>
+                                        <th>조회수</th>
+
+
+                                    </tr>
+                                    <c:forEach var="post" items="${postList}" varStatus="status">
+                                        <tr>
+                                            <td><a href="/post/${post.id}">${post.title}</a></td>
+                                            <th>${post.userInfo.username}</th>
+                                            <td><fmt:formatDate value="${post.createdDate}" pattern="yyyy-MM-dd" /></td>
+                                            <td>${post.views}</td>
+
+                                        </tr>
+                                    </c:forEach>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 오른쪽 컬럼 (인기글) -->
+                        <div class="col-6">
+                            <div class="alert alert-primary m-0">
+                                <span>인기글</span>
+                            </div>
+                            <div class="alert alert-primary">
+
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th>제목</th>
+                                        <th>작성자</th>
+                                        <th>작성일</th>
+                                        <th>조회수</th>
+                                        <th>추천수</th>
+
+                                    </tr>
+                                    <c:forEach var="post" items="${topList}" varStatus="status">
+                                        <tr>
+                                            <td><a href="/post/${post.id}">${post.title}</a></td>
+                                            <th>${post.userInfo.username}</th>
+                                            <td><fmt:formatDate value="${post.createdDate}" pattern="yyyy-MM-dd" /></td>
+                                            <td>${post.views}</td>
+                                            <td>${post.likeCount}</td>
+                                        </tr>
+                                    </c:forEach>
+                                </table>
+
+
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="svg-border-rounded text-dark">
                     <!-- Rounded SVG Border-->

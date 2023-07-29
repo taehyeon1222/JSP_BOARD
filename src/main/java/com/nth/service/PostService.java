@@ -289,6 +289,16 @@ public class PostService {
 //        }
 //    }
 
+    /**
+     * @return 공지5개를 가져옴
+     */
+    public List<Post> getNotice(){
+        return postMapper.getNotice(); //
+    }
 
+
+    public List<Post> getTopPost(){
+        return postMapper.getTopPost();
+    }
 
 }
