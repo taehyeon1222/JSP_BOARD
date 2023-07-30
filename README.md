@@ -12,7 +12,7 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 * #### 백엔드 개발 환경: SpringBoot 3.0.5, IntelliJ IDEA, MyBatis, Spring Security ,oracle(22.3.3)
 * #### 프론트 개발환경 : JSP, bootstrap template
 * #### 데이터 베이스: oracle(22.3.3)
-* #### 형상관리 : GitHub
+* #### 형상관리 : GitHub 
 
 
 ### ⚙ 주요기능
