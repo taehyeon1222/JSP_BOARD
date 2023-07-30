@@ -3,8 +3,9 @@
 JSP 와 MyBatis 를 활용한 기본적인기능들의 게시판 개인 프로젝트 입니다.
 
 # 💻프로젝트 소개
-한달이라는 기간을 미리 정해두고 여러 게시판 사이트를 참고 하여 제작하게된 회원 전용 게시판 사이트 입니다.
+한달 이라는 기간을 미리 정해두고 여러 게시판 사이트를 참고 하여 제작하게된 회원 전용 게시판 사이트 입니다.
 css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 커스터마이징 하였습니다.
+
 * #### 개발기간 : 2023.07.05 ~ 2023.07.29
 * #### 개발 인원 : 1명(노태현)
 * #### 개발 언어: JAVA 19.02
@@ -88,3 +89,17 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 ERD
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/9525fd3c-927e-4bf7-8ef4-c25d35da7235" width="500" height="300">
 <br>
+# 🧰 화면 설계
+
+
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/37b35812-71e2-4155-a60b-e8add87277cc" width="500" height="300">
+
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/6250443f-7a48-476c-ada7-7466ad37648a" width="500" height="300">
+
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/aa23b5aa-55c8-4c0d-aeda-f55a3ffe443d" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/6c70eb43-c144-41e4-99b4-38b9244de416" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/176418d0-e33a-40f2-a9f1-896d4b33b7b3" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/bc0121c6-7f23-485b-83be-c7ecc78f15b4" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/6aacbebe-bac5-4237-9256-b900817192ac" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/5706c18a-7c3b-4813-babc-ac0728713a6e" width="500" height="300">
+
