@@ -103,8 +103,8 @@ ERD
 컨트롤러에서 한 화면으로 뷰를 반환 시켰습니다. <br>
 이후 게시글 검색시 현재 카테고리에 맞게 검색된 게시글을 조회 할 수 있습니다.<br>
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/6c70eb43-c144-41e4-99b4-38b9244de416" width="500" height="300">
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/176418d0-e33a-40f2-a9f1-896d4b33b7b3" width="500" height="300">
+<br>회원정보 페이지 
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/bc0121c6-7f23-485b-83be-c7ecc78f15b4" width="500" height="300">
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/6aacbebe-bac5-4237-9256-b900817192ac" width="500" height="300">
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/5706c18a-7c3b-4813-babc-ac0728713a6e" width="500" height="300">
