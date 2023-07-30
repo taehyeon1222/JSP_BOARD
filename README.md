@@ -160,8 +160,20 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 
 # API 설계
 
+
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/96f21a69-23c3-4051-961e-82c6e237f589.JPG">
+
+#### 게시물
+
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/7d0dbc08-5a57-4c5c-bd09-7768243a4b4e.JPG">
+
+#### 댓글
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/eaad3f72-c0e6-40f8-96e6-e14affb567c0.JPG">
+
+#### 좋아요
+
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/928e04d2-9344-4933-8e82-0630493380d2.JPG">
+
+
+#### 유저정보
 
