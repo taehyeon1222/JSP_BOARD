@@ -20,13 +20,11 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
  유효성 검사
  @NotEmpty 유효성 검사 이후 회원가입가능
 
- 이미등록된 회원의 경우 에러메세지를 사용자에게 반환
-
-* #### 회원가입
-
+이미등록된 회원의 경우 에러메세지를 사용자에게 반환
+<br>
 데이터베이스에 존재하는 아이디를 입력한 채 회원가입 버튼을 누른 경우 "이미 사용중인 아이디입니다."의 메시지를 보여주기
-<br>이메일,닉네임은 중복가능 모든 검사가 통과되었다면 메인페이지로 이동시키기
-이후 데이터베이스에 비밀번호를 암호화 하여 저장하였습니다.
+<br>모든 검사가 통과되었다면 메인페이지로 이동시키기
+이후 데이터베이스에 BCryp로 비밀번호를 암호화 하여 저장하였습니다.
 
 
 * #### 로그인 페이지
@@ -37,7 +35,7 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 게시글 목록 조회 페이지
 게시글 상세보기 페이지
 게시글 검색 페이지
-그 외 로그인을 하지 않거나 올바르지 않은 경로로 접속한 사용자가 로그인이 필요한 경로에 접속한 경우 로그인 페이지로 이동
+그 외 로그인을 하지 않거나 올바르지 않은 경로로 접속한 사용자가 로그인이 필요한 경로에 접속한 경우 로그인 페이지로 이동 및 에러메세지르 반환
 @PreAuthorize("isAuthenticated()") 어노테이션을 사용
 
 
@@ -49,7 +47,16 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 * #### 게시글부분
 
 게시글 작성, 수정 시 제목과 내용은 공백 혹은 빈칸으로 작성불가능
-내가 작성한 글만 수정, 삭제 가능하게 하며 버튼을 노출시키지 않음 로그인을 하지 않고 글 작성 버튼을 누른 경우 로그인 페이지로 이동
+내가 작성한 글만 수정, 삭제 가능하게 하며 버튼을 노출시키지 않음
+<br>
+   public boolean AccessCheckPostButton(Principal principal, Post post){
+        boolean canEditPost = SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
+                (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) ||
+                        (principal != null && post.getUserInfo().getUsername().equals(principal.getName())));
+        return canEditPost;
+    }
+
+로그인을 하지 않고 글 작성 버튼을 누른 경우 로그인 페이지로 이동
 그 외 일반적인 방법이 아닌 직접 링크로 접속하는것 또한 방지, 및 공지사항은 관리자 계정만 작성가능
 홈화면에서 공지사항 과 추천수가 많은 인기글 순으로 확인가능
 
