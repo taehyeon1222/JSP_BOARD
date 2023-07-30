@@ -124,12 +124,15 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/bc0121c6-7f23-485b-83be-c7ecc78f15b4.JPG" width="500" height="300">
 
-#### 💻사용자 정보 화면
-ㅁㄴㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇ
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/6aacbebe-bac5-4237-9256-b900817192ac.JPG" width="500" height="300">
-#### 💻사용자 정보 화면
+#### 💻비밀번호 변경
+<br>
+비밀번호 변경에서는 기존의 비밀번호를 확인 후 새로운 비밀번호로 변경이 가능합니다.
 
-ㅁㄴㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇ
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/6aacbebe-bac5-4237-9256-b900817192ac.JPG" width="500" height="300">
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/5706c18a-7c3b-4813-babc-ac0728713a6e.JPG" width="500" height="300">
-#### 💻사용자 정보 화면
+
+#### 💻내가쓴글 및 내가쓴 댓글 확인
+
+
+
 
