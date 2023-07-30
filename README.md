@@ -102,6 +102,8 @@ ERD
 게시물 리스트 페이지에서는 게시물의 카테고리 별로 공지사항/자유게시판/건의사항 등으로 이동 할 수 있으며<br>
 컨트롤러에서 한 화면으로 뷰를 반환 시켰습니다. <br>
 이후 게시글 검색시 현재 카테고리에 맞게 검색된 게시글을 조회 할 수 있습니다.
+
+
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/176418d0-e33a-40f2-a9f1-896d4b33b7b3" width="500" height="300">
 * #### 회원정보 페이지
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/bc0121c6-7f23-485b-83be-c7ecc78f15b4" width="500" height="300">
