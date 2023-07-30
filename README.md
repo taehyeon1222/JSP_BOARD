@@ -134,6 +134,8 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/5706c18a-7c3b-4813-babc-ac0728713a6e.JPG" width="500" height="300">
 
 #### 💻내가쓴글 및 내가쓴 댓글 확인
+<br>
+내가쓴 글 과 내가 쓴 댓글을 페이징으로 확인이 가능합니다.
 
 
 
