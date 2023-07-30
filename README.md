@@ -158,5 +158,10 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 <br>
 
 
+# API 설계
 
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/96f21a69-23c3-4051-961e-82c6e237f589.JPG" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/7d0dbc08-5a57-4c5c-bd09-7768243a4b4e.JPG" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/eaad3f72-c0e6-40f8-96e6-e14affb567c0.JPG" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/928e04d2-9344-4933-8e82-0630493380d2.JPG" width="500" height="300">
 
