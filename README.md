@@ -138,10 +138,13 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 내가쓴 글 과 내가 쓴 댓글을 페이징으로 확인이 가능합니다.
 
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/0a22ac29-31d9-435a-81e9-bee4480b14cb" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/a15fcd19-c9ac-4c98-a95d-4a8435d5667d" width="500" height="300">)
 
 #### 💻게시물 상세페이지
 
 게시물 상세페이지에서는 관리자 및 게시물 작성자만 수정 및 삭제 할 수 있으며 게시물 작성자와,관리자가 아닐 경우 버튼이 노출 되지 않습니다.
+
+<br>
 
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/7eb56a2c-a372-4f1d-b270-9ba4b1bcaa94" width="500" height="300">
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/dd46bc50-afef-440a-82f7-8864f42edd22" width="500" height="300">
