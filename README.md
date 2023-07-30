@@ -49,13 +49,14 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 게시글 작성, 수정 시 제목과 내용은 공백 혹은 빈칸으로 작성불가능
 내가 작성한 글만 수정, 삭제 가능하게 하며 버튼을 노출시키지 않음
 <br>
+<pre>
    public boolean AccessCheckPostButton(Principal principal, Post post){
         boolean canEditPost = SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
                 (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) ||
                         (principal != null && post.getUserInfo().getUsername().equals(principal.getName())));
         return canEditPost;
     }
-
+</pre>
 로그인을 하지 않고 글 작성 버튼을 누른 경우 로그인 페이지로 이동
 그 외 일반적인 방법이 아닌 직접 링크로 접속하는것 또한 방지, 및 공지사항은 관리자 계정만 작성가능
 홈화면에서 공지사항 과 추천수가 많은 인기글 순으로 확인가능
