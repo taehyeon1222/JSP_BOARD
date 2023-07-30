@@ -116,14 +116,20 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/176418d0-e33a-40f2-a9f1-896d4b33b7b3.JPG" width="500" height="300">
 
-#### 사용자 정보 화면
+#### 💻사용자 정보 화면
 
 <br>
 
 사용자 정보 화면에서는 회원탈퇴,비밀번호 변경,내가쓴글,내가쓴 댓글 을 확인 할 수 있습니다.
+
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/bc0121c6-7f23-485b-83be-c7ecc78f15b4.JPG" width="500" height="300">
+
+#### 💻사용자 정보 화면
 ㅁㄴㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇ
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/6aacbebe-bac5-4237-9256-b900817192ac.JPG" width="500" height="300">
+#### 💻사용자 정보 화면
+
 ㅁㄴㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇ
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/5706c18a-7c3b-4813-babc-ac0728713a6e.JPG" width="500" height="300">
+#### 💻사용자 정보 화면
 
