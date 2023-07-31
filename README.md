@@ -105,7 +105,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 메인화면에서는 로그인 버튼/회원가입 버튼 및 <br>가장 최근의 공지사항 글 5개 / 인기글 5개를 조회 할 수 있습니다.
 <br>
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/aa23b5aa-55c8-4c0d-aeda-f55a3ffe443d.JPG"height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/aa23b5aa-55c8-4c0d-aeda-f55a3ffe443d.JPG" height="300">
 
 #### 💻게시물리스트
 
