@@ -10,6 +10,9 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 * #### 개발기간 : 2023.07.05 ~ 2023.07.29
 * #### 개발 인원 : 1명(노태현)
   <div>
+    <div>
+      <span>사용언어</span>
+    </div>
   <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
 </div>
 
