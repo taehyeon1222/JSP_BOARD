@@ -9,12 +9,10 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 
 * #### 개발기간 : 2023.07.05 ~ 2023.07.29
 * #### 개발 인원 : 1명(노태현)
-  <div>
-    <div>
-      <span>사용언어</span>
-    </div>
-  <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
-</div>
+  
+**사용언어**
+![Java](https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white)
+
 
 * #### 백엔드 개발 환경: SpringBoot 3.0.5, IntelliJ IDEA, MyBatis, Spring Security ,oracle(22.3.3)
 * #### 프론트 개발환경 : JSP, bootstrap template
