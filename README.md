@@ -90,7 +90,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 
 ##### ERD
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/9525fd3c-927e-4bf7-8ef4-c25d35da7235.JPG" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/9525fd3c-927e-4bf7-8ef4-c25d35da7235.JPG" width="100%" height="300">
 
 <br>
 
@@ -98,7 +98,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 
 #### 💻메인화면
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/37b35812-71e2-4155-a60b-e8add87277cc.JPG" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/37b35812-71e2-4155-a60b-e8add87277cc.JPG" width="100%" height="300">
 
 <br>
 
@@ -108,7 +108,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 
 #### 💻게시물리스트
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/aa23b5aa-55c8-4c0d-aeda-f55a3ffe443d.JPG" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/aa23b5aa-55c8-4c0d-aeda-f55a3ffe443d.JPG" width="100%" height="300">
 
 <br>
 게시물 리스트 페이지에서는 게시물의 카테고리 별로 공지사항/자유게시판/건의사항 등으로 이동 할 수 있으며<br>
@@ -117,14 +117,14 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 
 #### 💻사용자 정보 화면
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/176418d0-e33a-40f2-a9f1-896d4b33b7b3.JPG" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/176418d0-e33a-40f2-a9f1-896d4b33b7b3.JPG" width="100%" height="300">
 
 <br>
 사용자 정보 화면에서는 회원탈퇴,비밀번호 변경,내가쓴글,내가쓴 댓글 을 확인 할 수 있습니다.
 
 #### 💻비밀번호 변경
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/bc0121c6-7f23-485b-83be-c7ecc78f15b4.JPG" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/bc0121c6-7f23-485b-83be-c7ecc78f15b4.JPG"  width="100%" height="300">
 
 <br>
 비밀번호 변경에서는 기존의 비밀번호를 확인 후 새로운 비밀번호로 변경이 가능합니다.
@@ -132,8 +132,8 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 
 #### 💻내가쓴글 및 내가쓴 댓글 확인
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/6aacbebe-bac5-4237-9256-b900817192ac.JPG" width="50%" height="500">
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/5706c18a-7c3b-4813-babc-ac0728713a6e.JPG" width="50%" height="500">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/6aacbebe-bac5-4237-9256-b900817192ac.JPG" width="100%" height="500">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/5706c18a-7c3b-4813-babc-ac0728713a6e.JPG" width="100%" height="500">
 
 내가쓴 글 과 내가 쓴 댓글을 페이징으로 확인이 가능합니다.
 <br>
