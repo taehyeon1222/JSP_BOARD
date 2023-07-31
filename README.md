@@ -19,11 +19,17 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 <br>
 ![Java](https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white)
 
+**백엔드 개발 환경**<br>
+  SpringBoot 3.0.5, IntelliJ IDEA, MyBatis, Spring Security ,oracle(22.3.3)
+  
+**프론트 개발환경**<br>
+ JSP, bootstrap template
+ 
+**데이터 베이스**<br>
+oracle(22.3.3)
 
-* #### 백엔드 개발 환경: SpringBoot 3.0.5, IntelliJ IDEA, MyBatis, Spring Security ,oracle(22.3.3)
-* #### 프론트 개발환경 : JSP, bootstrap template
-* #### 데이터 베이스: oracle(22.3.3)
-* #### 형상관리 : GitHub 
+**형상관리**<br> 
+GitHub 
 
 
 ## ⚙ 주요기능
