@@ -24,7 +24,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
    IntelliJ IDEA, MyBatis, Spring Security
   
 **프론트 개발환경**<br>
- JSP, bootstrap template
+ JSP,   <img src="https://img.shields.io/badge/bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white">
  
 **데이터 베이스**<br>
 <img src="https://img.shields.io/badge/oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white"> 
