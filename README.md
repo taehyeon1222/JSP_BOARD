@@ -90,7 +90,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 
 ##### ERD
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/9525fd3c-927e-4bf7-8ef4-c25d35da7235.JPG" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/9525fd3c-927e-4bf7-8ef4-c25d35da7235.JPG" height="300">
 
 <br>
 
