@@ -97,7 +97,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 # 💻화면설계
 
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/37b35812-71e2-4155-a60b-e8add87277cc.JPG" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/37b35812-71e2-4155-a60b-e8add87277cc.JPG" height="300">
 <br>
 
 #### 💻메인화면
