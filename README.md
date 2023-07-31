@@ -21,7 +21,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 
 **백엔드 개발 환경**<br>
  <img src="https://img.shields.io/badge/springBoot 3.0.5-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
-   IntelliJ IDEA, MyBatis, Spring Security ,oracle(22.3.3)
+   IntelliJ IDEA, MyBatis, Spring Security
   
 **프론트 개발환경**<br>
  JSP, bootstrap template
@@ -30,7 +30,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 <img src="https://img.shields.io/badge/oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white"> 
 
 **형상관리**<br> 
-GitHub 
+ <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 
 
 ## ⚙ 주요기능
