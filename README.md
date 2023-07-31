@@ -11,8 +11,6 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 ><br>
 >  2023.07.05 ~ 2023.07.29
 
-<h3 style="padding: 0.6em 0.5em 0.6em 0.5em; margin: 0.5em 0em; color: #000; border-left: 10px solid #0f2443; border-bottom: 2px solid #e5e5e5; background-color: #ffffff; font-weight: bold;" data-ke-size="size23">소제목 1-1</h3>
-<p data-ke-size="size16">&nbsp;</p>
 
 <br>
 **개발 인원** 
