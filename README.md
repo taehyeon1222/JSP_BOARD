@@ -132,8 +132,8 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 
 #### 💻내가쓴글 및 내가쓴 댓글 확인
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/6aacbebe-bac5-4237-9256-b900817192ac.JPG" width="300" height="500">
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/5706c18a-7c3b-4813-babc-ac0728713a6e.JPG" width="300" height="500">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/6aacbebe-bac5-4237-9256-b900817192ac.JPG" width="50%" height="500">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/5706c18a-7c3b-4813-babc-ac0728713a6e.JPG" width="50%" height="500">
 
 내가쓴 글 과 내가 쓴 댓글을 페이징으로 확인이 가능합니다.
 <br>
@@ -143,9 +143,8 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/0a22ac29-31d9-435a-81e9-bee4480b14cb" width="50%" height="500">
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/a15fcd19-c9ac-4c98-a95d-4a8435d5667d" width="50%" height="500">
 
+
 게시물 상세페이지에서는 관리자 및 게시물 작성자만 수정 및 삭제 할 수 있으며 게시물 작성자와 관리자가 아닐 경우 버튼이 노출 되지 않습니다.
-
-
 <br>
 
 
