@@ -131,16 +131,16 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 비밀번호 변경에서는 기존의 비밀번호를 확인 후 새로운 비밀번호로 변경이 가능합니다.
 <br>
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/6aacbebe-bac5-4237-9256-b900817192ac.JPG" width="500" height="300">
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/5706c18a-7c3b-4813-babc-ac0728713a6e.JPG" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/6aacbebe-bac5-4237-9256-b900817192ac.JPG" width="500" height="500">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/5706c18a-7c3b-4813-babc-ac0728713a6e.JPG" width="500" height="500">
 
 #### 💻내가쓴글 및 내가쓴 댓글 확인
 
 내가쓴 글 과 내가 쓴 댓글을 페이징으로 확인이 가능합니다.
 <br>
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/0a22ac29-31d9-435a-81e9-bee4480b14cb" width="500" height="300">
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/a15fcd19-c9ac-4c98-a95d-4a8435d5667d" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/0a22ac29-31d9-435a-81e9-bee4480b14cb" width="500" height="500">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/a15fcd19-c9ac-4c98-a95d-4a8435d5667d" width="500" height="500">
 <br>
 
 #### 💻게시물 상세페이지
@@ -151,8 +151,8 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 
 
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/7eb56a2c-a372-4f1d-b270-9ba4b1bcaa94" width="500" height="300">
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/dd46bc50-afef-440a-82f7-8864f42edd22" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/7eb56a2c-a372-4f1d-b270-9ba4b1bcaa94" width="500" height="500">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/dd46bc50-afef-440a-82f7-8864f42edd22" width="500" height="500">
 
 #### 💻로그인/회원가입페이지
 
