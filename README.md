@@ -105,7 +105,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 메인화면에서는 로그인 버튼/회원가입 버튼 및 <br>가장 최근의 공지사항 글 5개 / 인기글 5개를 조회 할 수 있습니다.
 <br>
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/aa23b5aa-55c8-4c0d-aeda-f55a3ffe443d.JPG" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/aa23b5aa-55c8-4c0d-aeda-f55a3ffe443d.JPG"height="300">
 
 #### 💻게시물리스트
 
@@ -115,7 +115,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 컨트롤러에서 한 화면으로 뷰를 반환 시켰습니다. <br>
 이후 게시글 검색시 현재 카테고리에 맞게 검색된 게시글을 조회 할 수 있습니다.
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/176418d0-e33a-40f2-a9f1-896d4b33b7b3.JPG" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/176418d0-e33a-40f2-a9f1-896d4b33b7b3.JPG" height="300">
 
 #### 💻사용자 정보 화면
 
@@ -123,7 +123,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 
 사용자 정보 화면에서는 회원탈퇴,비밀번호 변경,내가쓴글,내가쓴 댓글 을 확인 할 수 있습니다.
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/bc0121c6-7f23-485b-83be-c7ecc78f15b4.JPG" width="500" height="300">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/bc0121c6-7f23-485b-83be-c7ecc78f15b4.JPG"height="300">
 
 #### 💻비밀번호 변경
 
