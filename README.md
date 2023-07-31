@@ -148,7 +148,6 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 
 <br>
 
-#### 💻로그인/회원가입페이지
 <h4>💻로그인/회원가입페이지</h4>
 
 <div style="display: flex; justify-content: space-between;">
