@@ -140,8 +140,8 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 
 #### 💻게시물 상세페이지
 
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/0a22ac29-31d9-435a-81e9-bee4480b14cb" width="500" height="500">
-<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/a15fcd19-c9ac-4c98-a95d-4a8435d5667d" width="500" height="500">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/0a22ac29-31d9-435a-81e9-bee4480b14cb" width="50%" height="500">
+<img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/a15fcd19-c9ac-4c98-a95d-4a8435d5667d" width="50%" height="500">
 
 게시물 상세페이지에서는 관리자 및 게시물 작성자만 수정 및 삭제 할 수 있으며 게시물 작성자와 관리자가 아닐 경우 버튼이 노출 되지 않습니다.
 
