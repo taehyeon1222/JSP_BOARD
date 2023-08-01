@@ -23,7 +23,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
  <img src="https://img.shields.io/badge/springBoot 3.0.5-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
    IntelliJ IDEA, MyBatis, Spring Security
    
-   ![intellijidea](https://img.shields.io/badge/intellijidea-ffffff?style=for-the-badge&logo=react&logoColor=green)
+   ![intellijidea](https://img.shields.io/badge/intellijidea-ffffff?style=for-the-badge&logo=intellijidea&logoColor=green)
    
 ![React](https://img.shields.io/badge/react-ffffff?style=for-the-badge&logo=react)
 ![React](https://img.shields.io/badge/react-444444?style=for-the-badge&logo=react)
