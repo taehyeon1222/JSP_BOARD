@@ -148,6 +148,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 > 사용자 정보 화면에서는 회원탈퇴,비밀번호 변경,내가쓴글,내가쓴 댓글 을 확인 할 수 있습니다.
 
 <br>
+
 #### 💻비밀번호 변경
 
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/bc0121c6-7f23-485b-83be-c7ecc78f15b4.JPG"  width="100%" height="300">
@@ -181,7 +182,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 <br>
 
 
-<h4>💻로그인/회원가입페이지</h4>
+#### 💻로그인/회원가입페이지 
 
  <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/7eb56a2c-a372-4f1d-b270-9ba4b1bcaa94" width="100%" height="500">
  <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/dd46bc50-afef-440a-82f7-8864f42edd22" width="100%" height="500">
