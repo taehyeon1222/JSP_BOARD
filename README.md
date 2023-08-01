@@ -22,7 +22,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 
 **백엔드 개발 환경**<br>
  <img src="https://img.shields.io/badge/springBoot 3.0.5-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
-![intellij idea](https://img.shields.io/badge/intellijidea-000000?style=for-the-badge&logo=intellijidea&logoColor=000000)
+![intellij idea](https://img.shields.io/badge/intellijidea-000000?style=for-the-badge&logo=intellijidea&logoColor=fffffff)
 MyBatis, Spring Security
    
 ![React](https://img.shields.io/badge/react-ffffff?style=for-the-badge&logo=react)
