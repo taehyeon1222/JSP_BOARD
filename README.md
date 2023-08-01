@@ -17,7 +17,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 
 **사용언어**
 <br>
-![Java](https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white)
+![Java](https://img.shields.io/badge/java-ffffff?style=for-the-badge&logo=java&logoColor=000000)
 
 **백엔드 개발 환경**<br>
  <img src="https://img.shields.io/badge/springBoot 3.0.5-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
