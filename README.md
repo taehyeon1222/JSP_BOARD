@@ -137,19 +137,25 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 > 컨트롤러에서 한 화면으로 뷰를 반환 시켰습니다. <br>
 > 이후 게시글 검색시 현재 카테고리에 맞게 검색된 게시글을 조회 할 수 있습니다.
 
+<br>
+
 #### 💻사용자 정보 화면
 
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/176418d0-e33a-40f2-a9f1-896d4b33b7b3.JPG" width="100%" height="300">
 
 <br>
-사용자 정보 화면에서는 회원탈퇴,비밀번호 변경,내가쓴글,내가쓴 댓글 을 확인 할 수 있습니다.
 
+> 사용자 정보 화면에서는 회원탈퇴,비밀번호 변경,내가쓴글,내가쓴 댓글 을 확인 할 수 있습니다.
+
+<br>
 #### 💻비밀번호 변경
 
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/bc0121c6-7f23-485b-83be-c7ecc78f15b4.JPG"  width="100%" height="300">
 
 <br>
-비밀번호 변경에서는 기존의 비밀번호를 확인 후 새로운 비밀번호로 변경이 가능합니다.
+
+> 비밀번호 변경에서는 기존의 비밀번호를 확인 후 새로운 비밀번호로 변경이 가능합니다.
+
 <br>
 
 #### 💻내가쓴글 및 내가쓴 댓글 확인
@@ -157,7 +163,10 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/6aacbebe-bac5-4237-9256-b900817192ac.JPG" width="100%" height="500">
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/5706c18a-7c3b-4813-babc-ac0728713a6e.JPG" width="100%" height="500">
 
-내가쓴 글 과 내가 쓴 댓글을 페이징으로 확인이 가능합니다.
+<br>
+
+> 내가쓴 글 과 내가 쓴 댓글을 페이징으로 확인이 가능합니다.
+
 <br>
 
 #### 💻게시물 상세페이지
@@ -165,8 +174,10 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/0a22ac29-31d9-435a-81e9-bee4480b14cb" width="100%" height="500">
 <img src="https://github.com/taehyeon1222/JSP_BOARD/assets/129807676/a15fcd19-c9ac-4c98-a95d-4a8435d5667d" width="100%" height="500">
 
+<br>
 
-게시물 상세페이지에서는 관리자 및 게시물 작성자만 수정 및 삭제 할 수 있으며 게시물 작성자와 관리자가 아닐 경우 버튼이 노출 되지 않습니다.
+> 게시물 상세페이지에서는 관리자 및 게시물 작성자만 수정 및 삭제 할 수 있으며 게시물 작성자와 관리자가 아닐 경우 버튼이 노출 되지 않습니다.
+
 <br>
 
 
