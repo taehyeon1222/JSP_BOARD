@@ -16,21 +16,22 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 <br>
 
 **사용언어**
-<br>
-
-<img src="https://img.shields.io/badge/java-007396?style=flat-square&logo=java&logoColor=white"/>
+ <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"/>
 
 **백엔드 개발 환경**<br>
  <img src="https://img.shields.io/badge/springBoot 3.0.5-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> 
  <img src="https://img.shields.io/badge/intellij idea-000000?style=for-the-badge&logo=intellijidea&logoColor=fffffff"> 
  
 **프론트 개발환경**<br>
- JSP,   <img src="https://img.shields.io/badge/bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white">
+
+<img src="https://img.shields.io/badge/bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white">
  
 **데이터 베이스**<br>
+
 <img src="https://img.shields.io/badge/oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white"> 
 
 **형상관리**<br> 
+
  <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 
 
