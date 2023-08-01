@@ -22,7 +22,7 @@ CSS는 부트스트랩을 이용하고, 여러 사이트를 직접 방문하여 
 **백엔드 개발 환경**<br>
  <img src="https://img.shields.io/badge/springBoot 3.0.5-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> 
  <img src="https://img.shields.io/badge/intellij idea-000000?style=for-the-badge&logo=intellijidea&logoColor=fffffff"> 
-  <img src="https://img.shields.io/badge/JSP idea-000000?style=for-the-badge&logo=JSP&logoColor=fffffff"> 
+  <img src="https://img.shields.io/badge/JSP-000000?style=for-the-badge&logo=JSP&logoColor=fffffff"> 
  
 **프론트 개발환경**<br>
 
