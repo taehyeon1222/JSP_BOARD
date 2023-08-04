@@ -109,13 +109,18 @@ public class LikeController {
         like.setPostId(postId);
 
         // Like 서비스를 사용해 사용자가 이미 좋아요를 눌렀는지 확인합니다.
-        Like resultLike = likeService.duplicationLike(like);
+        //Like resultLike = likeService.duplicationLike(like);
         toggleLikeStatus(like);
         Long count = likeService.countLike(postId);
         log.info("좋아요를 완료했습니다 현재 게시글 좋아요 수 :{}",count);
         return "redirect:/post/"+postId;
     }
 
+    /**
+
+     * @param like
+     *  좋아요 중복체크
+     */
     private void toggleLikeStatus(Like like){
         Like existingLike = likeService.duplicationLike(like);
         if (existingLike != null) {

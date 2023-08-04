@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -150,25 +151,32 @@ public class homeController {
         return "post/post_detail";
     }
 
+    // 게시글 생성 form
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
-    public String createPost(Model model) {
-        model.addAttribute("formActionUrl", "/create");
-        return "post/postcreate";}
+    public String createPostForm(Model model) {
+        model.addAttribute("formActionUrl", "/post");
+        model.addAttribute("forminputdata", "post");
+        return "post/postcreate";
+    }
 
+    // 게시글 생성
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/create")
-    public String createPost(@Valid PostForm postForm, BindingResult result, Principal principal, Model model, RedirectAttributes redirectAttributes) {
+    @PostMapping("/post")
+    public ResponseEntity<Long> createPost(@Valid PostForm postForm, BindingResult result, Principal principal, RedirectAttributes redirectAttributes) {
         String errorResult = validateCheck(result, postForm, redirectAttributes);
         // 유효성 검사 메서드
         if (errorResult != null) {
-            return errorResult;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         UserInfo userInfo = userInfoService.findByUsername(principal.getName());
         Post post = postService.createIdPost(postForm, userInfo);
-        Long postid = post.getId();
-        return "redirect:/post/"+postid;
+        Long postId = post.getId();
+
+        return new ResponseEntity<>(postId, HttpStatus.CREATED);
     }
+
 
     //수정
     @GetMapping("/post/modify/{id}")
